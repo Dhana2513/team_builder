@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCuLvKUImvOtrbJr9q4qa5vy8YrK6k6LjM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>977557701611</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.team.builder.teamBuilder</string>
+	<key>PROJECT_ID</key>
+	<string>fantacy-cricket-team-builder</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fantacy-cricket-team-builder.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:977557701611:ios:cbf1f0c29dab5ae0d84fae</string>
+</dict>
+</plist>

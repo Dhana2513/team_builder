@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "977557701611",
+    "project_id": "fantacy-cricket-team-builder",
+    "storage_bucket": "fantacy-cricket-team-builder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977557701611:android:11790a0a120d2d80d84fae",
+        "android_client_info": {
+          "package_name": "com.example.team.builder.team_builder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvmS7V61_HFr_pDuz-3OfCsD-psyZNZcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
