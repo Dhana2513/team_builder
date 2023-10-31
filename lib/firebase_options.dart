@@ -52,6 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '977557701611',
     projectId: 'fantacy-cricket-team-builder',
     authDomain: 'fantacy-cricket-team-builder.firebaseapp.com',
+    databaseURL: 'https://fantacy-cricket-team-builder-default-rtdb.firebaseio.com',
     storageBucket: 'fantacy-cricket-team-builder.appspot.com',
     measurementId: 'G-VFQWEZ5Q9V',
   );
@@ -61,6 +62,7 @@ class DefaultFirebaseOptions {
     appId: '1:977557701611:android:11790a0a120d2d80d84fae',
     messagingSenderId: '977557701611',
     projectId: 'fantacy-cricket-team-builder',
+    databaseURL: 'https://fantacy-cricket-team-builder-default-rtdb.firebaseio.com',
     storageBucket: 'fantacy-cricket-team-builder.appspot.com',
   );
 
@@ -69,6 +71,7 @@ class DefaultFirebaseOptions {
     appId: '1:977557701611:ios:cbf1f0c29dab5ae0d84fae',
     messagingSenderId: '977557701611',
     projectId: 'fantacy-cricket-team-builder',
+    databaseURL: 'https://fantacy-cricket-team-builder-default-rtdb.firebaseio.com',
     storageBucket: 'fantacy-cricket-team-builder.appspot.com',
     iosBundleId: 'com.example.team.builder.teamBuilder',
   );
