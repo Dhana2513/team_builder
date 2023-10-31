@@ -1,4 +1,4 @@
-import 'package:team_builder/domain/entity/player.dart';
+import 'player.dart';
 
 class Team {
   final List<Player> batsmans;
