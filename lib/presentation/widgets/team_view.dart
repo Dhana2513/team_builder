@@ -16,7 +16,7 @@ class TeamView extends StatelessWidget {
   final List<Player> players;
   final VoidCallback onPlayerUpdate;
   
-  Widget getItem(TeamType teamType, List<Player> teamPlayers) {
+  Widget getItem(BuildContext context, teamType, List<Player> teamPlayers) {
 
           return Column(
             children: [
@@ -43,7 +43,7 @@ class TeamView extends StatelessWidget {
      return Column(
        children:[
          for(int i=0; i<teams.length; i++)
-           getItem(teams[i], playersModel.playersByTeam(teamType: teams[i])),
+           getItem(context, teams[i], playersModel.playersByTeam(teamType: teams[i])),
          ]
        );
   }
