@@ -43,7 +43,7 @@ class TeamView extends StatelessWidget {
      return Column(
        children:[
          for(int i=0; i<teams.length; i++)
-           getItem(teams[i], playersModel.playersByTeam(teamType: teams[i]));
+           getItem(teams[i], playersModel.playersByTeam(teamType: teams[i])),
          ]
        );
   }
