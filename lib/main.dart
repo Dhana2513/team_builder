@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:team_builder/presentation/screens/add_player_screen.dart';
+import 'package:team_builder/presentation/screens/all_players_screen.dart';
+import 'package:team_builder/presentation/screens/create_teams_screen.dart';
 
 import 'firebase_options.dart';
 import 'presentation/home_screen.dart';
@@ -28,8 +31,13 @@ class MyApp extends StatelessWidget {
       title: 'Team Builder',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      // home: const AddPlayerScreen(),
-      home: const HomeScreen(),
+      initialRoute: HomeScreen.routeName,
+      routes: {
+        HomeScreen.routeName: (_) => const HomeScreen(),
+        AddPlayerScreen.routeName: (_) => const AddPlayerScreen(),
+        AllPlayersScreen.routeName: (_) => const AllPlayersScreen(),
+        CreateTeamsScreen.routeName: (_) => const CreateTeamsScreen(),
+      },
     );
   }
 }

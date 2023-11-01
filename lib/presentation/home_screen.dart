@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:team_builder/presentation/add_player_screen.dart';
-import 'package:team_builder/presentation/all_players_screen.dart';
+import 'package:team_builder/constants/paddings.dart';
+import 'package:team_builder/presentation/screens/add_player_screen.dart';
+import 'package:team_builder/presentation/screens/all_players_screen.dart';
+
+import 'screens/create_teams_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  static const routeName = '/';
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -13,47 +18,33 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {},
-            child: const Icon(Icons.add),
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            onPressed: navigateToAddPlayerScreen,
-            child: const Icon(Icons.person_add_alt),
-          )
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => navigateTo(routeName: AddPlayerScreen.routeName),
+        child: const Icon(Icons.person_add_alt),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: navigateToPlayersScreen,
+              onPressed: () =>
+                  navigateTo(routeName: AllPlayersScreen.routeName),
               child: const Text('All Players'),
-            )
+            ),
+            paddingExtraLarge,
+            ElevatedButton(
+              onPressed: () =>
+                  navigateTo(routeName: CreateTeamsScreen.routeName),
+              child: const Text('Create Teams'),
+            ),
           ],
         ),
       ),
     );
   }
 
-  void navigateToAddPlayerScreen() {
-    navigateTo(to: const AddPlayerScreen());
-  }
-
-  void navigateToAddMatchScreen() {}
-
-  void navigateToPlayersScreen() {
-    navigateTo(to: const AllPlayersScreen());
-  }
-
-  void navigateTo({required Widget to}) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return to;
-    }));
+  void navigateTo({required String routeName}) {
+    Navigator.of(context).pushNamed(routeName);
   }
 }

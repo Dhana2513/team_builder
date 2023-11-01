@@ -3,6 +3,7 @@ import '../type/player_type.dart';
 import '../type/team_type.dart';
 
 class Player {
+  final String? id;
   final TeamType teamType;
   final String name;
   final PlayerType playerType;
@@ -12,6 +13,7 @@ class Player {
   final int captaincyRating;
 
   Player({
+    this.id,
     required this.teamType,
     required this.name,
     required this.playerType,
@@ -20,8 +22,9 @@ class Player {
     required this.captaincyRating,
   });
 
-  factory Player.fromJson(Map<String, dynamic> json) {
+  factory Player.fromJson(Map<String, dynamic> json, {required String? id}) {
     return Player(
+      id: id,
       teamType: TeamTypeX.fromName(name: json[PlayerKeys.teamType]),
       name: json[PlayerKeys.name],
       playerType: PlayerTypeX.fromName(name: json[PlayerKeys.playerType]),

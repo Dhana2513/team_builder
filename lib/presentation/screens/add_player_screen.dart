@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../constants/paddings.dart';
-import '../core/dbutil.dart';
-import '../models/entity/player.dart';
-import '../models/type/bowling_type.dart';
-import '../models/type/player_type.dart';
-import '../models/type/team_type.dart';
+import '../../constants/paddings.dart';
+import '../../core/dbutil.dart';
+import '../../models/entity/player.dart';
+import '../../models/type/bowling_type.dart';
+import '../../models/type/player_type.dart';
+import '../../models/type/team_type.dart';
 
 class AddPlayerScreen extends StatefulWidget {
   const AddPlayerScreen({Key? key}) : super(key: key);
+
+  static const routeName = '/addPlayer';
 
   @override
   _AddPlayerScreenState createState() => _AddPlayerScreenState();
@@ -25,8 +27,30 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
   bool get canBowl =>
       [PlayerType.allRounder, PlayerType.bowler].contains(playerType);
 
+  bool get modifyPlayer {
+    return player != null;
+  }
+
+  Player? player;
+
+  void setValues(BuildContext context) {
+    player = ModalRoute.of(context)!.settings.arguments as Player?;
+    if (modifyPlayer) {
+      playerNameController.text = player!.name;
+      teamType = player!.teamType;
+      playerType = player!.playerType;
+      bowlingType = player!.bowlingType;
+      captaincyRating = player!.captaincyRating.toDouble();
+      playerRating = player!.playerRating.toDouble();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (player == null) {
+      setValues(context);
+    }
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -47,7 +71,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
                 });
               },
             ),
-            largePadding,
+            paddingLarge,
             TextField(
               controller: playerNameController,
               decoration: const InputDecoration(
@@ -56,7 +80,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
                 filled: true,
               ),
             ),
-            largePadding,
+            paddingLarge,
             DropdownButtonFormField<PlayerType>(
               decoration: const InputDecoration(labelText: 'Player Type'),
               value: playerType,
@@ -72,7 +96,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
                 });
               },
             ),
-            largePadding,
+            paddingLarge,
             if (canBowl) ...[
               DropdownButtonFormField<BowlingType>(
                 decoration: const InputDecoration(labelText: 'Bowling Type'),
@@ -89,7 +113,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
                   });
                 },
               ),
-              largePadding,
+              paddingLarge,
             ],
             const Text('Player Ratting'),
             Slider(
@@ -103,7 +127,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
                 });
               },
             ),
-            largePadding,
+            paddingLarge,
             const Text('Captaincy Ratting'),
             Slider(
               value: captaincyRating,
@@ -116,10 +140,10 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
                 });
               },
             ),
-            largePadding,
+            paddingLarge,
             ElevatedButton(
               onPressed: validateAndSubmit,
-              child: const Text('Add'),
+              child: Text(modifyPlayer ? 'Update' : 'Add'),
             )
           ],
         ),
@@ -145,13 +169,22 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
         captaincyRating: captaincyRating.toInt(),
       );
 
-      DbUtil.instance.playersCollection.add(player.toJson());
+      if (modifyPlayer) {
+        DbUtil.instance
+            .updatePlayer(docID: this.player!.id!, player: player)
+            .then((_) {
+          showSnackBar(message: 'Record modified');
+          Navigator.of(context).pop(true);
+        });
+      } else {
+        DbUtil.instance.addPlayer(player: player);
 
-      setState(() {
-        playerNameController.text = '';
-      });
+        setState(() {
+          playerNameController.text = '';
+        });
 
-      showSnackBar(message: 'Record added');
+        showSnackBar(message: 'Record added');
+      }
     }
   }
 

@@ -6,12 +6,26 @@ class DbUtil {
 
   static final instance = DbUtil._();
 
-  final playersCollection =
+  final _playersCollection =
       FirebaseFirestore.instance.collection(DBKeys.players);
 
   Future<List<Player>> allPlayers() async {
-    final snapshot = await playersCollection.get();
-    return snapshot.docs.map((doc) => Player.fromJson(doc.data())).toList();
+    final snapshot = await _playersCollection.get();
+    return snapshot.docs
+        .map((doc) => Player.fromJson(doc.data(), id: doc.id))
+        .toList();
+  }
+
+  Future updatePlayer({required String docID, required Player player}) {
+    return _playersCollection.doc(docID).update(player.toJson());
+  }
+
+  Future addPlayer({required Player player}) {
+    return _playersCollection.add(player.toJson());
+  }
+
+  void delete({String? id}) {
+    _playersCollection.doc(id).delete();
   }
 }
 
