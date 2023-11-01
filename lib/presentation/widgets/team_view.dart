@@ -40,15 +40,11 @@ class TeamView extends StatelessWidget {
   Widget build(BuildContext context) {
     final playersModel = PlayersModel(players: players);
     final teams = playersModel.allTeams();
-
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: teams.length,
-        itemBuilder: (context, index) {
-          final teamType = teams[index];
-
-          final teamPlayers = playersModel.playersByTeam(teamType: teamType);
-return getItem(teamType, teamPlayers);
-        });
+     return Column(
+       childrens:[
+         for(int i=0; i<teams.length; i++)
+         return getItem(teams[i], playersModel.playersByTeam(teamType: teams[i]));
+         ]
+       );
   }
 }
