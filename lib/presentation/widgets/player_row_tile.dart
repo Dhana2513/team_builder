@@ -8,11 +8,11 @@ class PlayerRowTile extends StatelessWidget {
   const PlayerRowTile({
     Key? key,
     required this.player,
-    required this.onPlayerUpdate,
+    this.onPlayerUpdate,
   }) : super(key: key);
 
   final Player player;
-  final VoidCallback onPlayerUpdate;
+  final VoidCallback? onPlayerUpdate;
 
   @override
   Widget build(BuildContext context) {
@@ -43,26 +43,28 @@ class PlayerRowTile extends StatelessWidget {
           'CR : ${player.captaincyRating}%',
           style: textStyle,
         ),
-        IconButton(
-          onPressed: () => navigateToAddPlayerScreen(context: context),
-          icon: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.edit,
-              color: Colors.black54,
+        if (onPlayerUpdate != null) ...[
+          IconButton(
+            onPressed: () => navigateToAddPlayerScreen(context: context),
+            icon: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.edit,
+                color: Colors.black54,
+              ),
             ),
           ),
-        ),
-        IconButton(
-          onPressed: deletePlayer,
-          icon: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.delete,
-              color: Colors.black54,
+          IconButton(
+            onPressed: deletePlayer,
+            icon: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.delete,
+                color: Colors.black54,
+              ),
             ),
           ),
-        ),
+        ],
       ],
     );
   }
@@ -75,13 +77,13 @@ class PlayerRowTile extends StatelessWidget {
 
     if (refresh is bool?) {
       if (refresh == true) {
-        onPlayerUpdate.call();
+        onPlayerUpdate?.call();
       }
     }
   }
 
   void deletePlayer() {
     DbUtil.instance.delete(id: player.id);
-    onPlayerUpdate.call();
+    onPlayerUpdate?.call();
   }
 }

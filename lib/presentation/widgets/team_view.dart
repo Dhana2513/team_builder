@@ -41,7 +41,7 @@ class TeamView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playersModel = PlayersModel(players: players);
-    final teams = playersModel.allTeams();
+    final teams = playersModel.allTeamTypes();
     return Column(
       children: teams
           .map(

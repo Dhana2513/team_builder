@@ -22,7 +22,7 @@ class Player {
     required this.captaincyRating,
   });
 
-  factory Player.fromJson(Map<String, dynamic> json, {required String? id}) {
+  factory Player.fromJson(Map<String, dynamic> json, {String? id}) {
     return Player(
       id: id,
       teamType: TeamTypeX.fromName(name: json[PlayerKeys.teamType]),

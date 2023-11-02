@@ -39,19 +39,11 @@ class PlayersModel {
     return teamPlayers;
   }
 
-  List<Player> playersByPlayerType({
-    required TeamType teamType,
-    required PlayerType playerType,
-  }) {
-    final teamPlayers =
-        players.where((player) => player.teamType == teamType).toList();
-
-    return teamPlayers
-        .where((player) => player.playerType == playerType)
-        .toList();
+  List<Player> playersByPlayerType({required PlayerType playerType}) {
+    return players.where((player) => player.playerType == playerType).toList();
   }
 
-  List<TeamType> allTeams() {
+  List<TeamType> allTeamTypes() {
     return players.map((player) => player.teamType).toSet().toList();
   }
 }
