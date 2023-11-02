@@ -3,6 +3,7 @@ import 'package:team_builder/constants/paddings.dart';
 import 'package:team_builder/presentation/screens/add_player_screen.dart';
 import 'package:team_builder/presentation/screens/all_players_screen.dart';
 
+import '../core/widgets/common_app_bar.dart';
 import 'screens/create_teams_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,6 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CommonAppBar(
+        title: 'Team Builder',
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => navigateTo(routeName: AddPlayerScreen.routeName),
         child: const Icon(Icons.person_add_alt),

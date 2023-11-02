@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/paddings.dart';
 import '../../core/dbutil.dart';
+import '../../core/widgets/common_app_bar.dart';
 import '../../models/entity/player.dart';
 import '../../models/type/bowling_type.dart';
 import '../../models/type/player_type.dart';
@@ -52,6 +53,9 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
     }
 
     return Scaffold(
+      appBar: CommonAppBar(
+        title: 'Add Player',
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -79,6 +83,8 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
                 border: OutlineInputBorder(),
                 filled: true,
               ),
+              textCapitalization: TextCapitalization.sentences,
+              keyboardType: TextInputType.name,
             ),
             paddingLarge,
             DropdownButtonFormField<PlayerType>(

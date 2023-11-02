@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team_builder/core/dbutil.dart';
 import 'package:team_builder/presentation/widgets/team_view.dart';
 
+import '../../core/widgets/common_app_bar.dart';
 import '../../models/entity/player.dart';
 
 class AllPlayersScreen extends StatefulWidget {
@@ -29,6 +30,9 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CommonAppBar(
+        title: 'All Players',
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: FutureBuilder<List<Player>>(

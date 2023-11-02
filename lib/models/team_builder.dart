@@ -8,12 +8,14 @@ class TeamBuilder {
 
   final PitchType pitchType;
   final int numberOfTeams;
+  final int averageScore;
 
   TeamBuilder({
     required this.teamType1,
     required this.teamType2,
     required this.pitchType,
     required this.numberOfTeams,
+    required this.averageScore,
   });
 
   void build() async {

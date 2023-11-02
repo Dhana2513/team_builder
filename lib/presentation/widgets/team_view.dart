@@ -15,36 +15,43 @@ class TeamView extends StatelessWidget {
 
   final List<Player> players;
   final VoidCallback onPlayerUpdate;
-  
-  Widget getItem(BuildContext context, teamType, List<Player> teamPlayers) {
 
-          return Column(
-            children: [
-              Text(
-                teamType.longName,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              padding,
-              for (int i = 0; i < teamPlayers.length; i++)
-                PlayerRowTile(
-                  player: teamPlayers[i],
-                  onPlayerUpdate: onPlayerUpdate,
-                ),
-              paddingLarge,
-            ],
-          );
+  Widget getItem(
+    BuildContext context,
+    TeamType teamType,
+    List<Player> teamPlayers,
+  ) {
+    return Column(
+      children: [
+        Text(
+          teamType.longName,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        padding,
+        for (int i = 0; i < teamPlayers.length; i++)
+          PlayerRowTile(
+            player: teamPlayers[i],
+            onPlayerUpdate: onPlayerUpdate,
+          ),
+        paddingLarge,
+      ],
+    );
   }
 
-    
   @override
   Widget build(BuildContext context) {
     final playersModel = PlayersModel(players: players);
     final teams = playersModel.allTeams();
-     return Column(
-       children:[
-         for(int i=0; i<teams.length; i++)
-           getItem(context, teams[i], playersModel.playersByTeam(teamType: teams[i])),
-         ]
-       );
+    return Column(
+      children: teams
+          .map(
+            (team) => getItem(
+              context,
+              team,
+              playersModel.playersByTeam(teamType: team),
+            ),
+          )
+          .toList(),
+    );
   }
 }
