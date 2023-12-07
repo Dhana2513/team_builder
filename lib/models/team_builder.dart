@@ -4,7 +4,6 @@ import 'package:team_builder/core/dbutil.dart';
 import 'package:team_builder/models/entity/player.dart';
 import 'package:team_builder/models/entity/team_model.dart';
 import 'package:team_builder/models/players_model.dart';
-import 'package:team_builder/models/type/pitch_type.dart';
 import 'package:team_builder/models/type/player_type.dart';
 import 'package:team_builder/models/type/team_type.dart';
 
@@ -12,32 +11,22 @@ class TeamBuilder {
   final TeamType teamType1;
   final TeamType teamType2;
 
-  final PitchType pitchType;
   final int numberOfTeams;
-  final int averageScore;
 
   TeamBuilder({
     required this.teamType1,
     required this.teamType2,
-    required this.pitchType,
     required this.numberOfTeams,
-    required this.averageScore,
   });
-
-  late final bool battingPitch;
-  late final bool bowlingPitch;
-
-  late final int allRounderCount;
-  late final int keeperCount;
 
   final random = Random();
   final List<Player> allPlayers = [];
   late final PlayersModel playersModel;
 
+  int allRounderCount = 0;
+
   void build() async {
     final allTeamPlayers = await DbUtil.instance.allPlayers();
-    battingPitch = averageScore >= 250;
-    bowlingPitch = averageScore <= 200;
 
     allPlayers.addAll(allTeamPlayers
         .where((player) =>
@@ -48,7 +37,6 @@ class TeamBuilder {
     playersModel = PlayersModel(players: allPlayers);
 
     allRounderCount = playerCount(PlayerType.allRounder);
-    keeperCount = playerCount(PlayerType.keeper);
 
     int count = numberOfTeams;
 
@@ -57,32 +45,22 @@ class TeamBuilder {
     while (count != 0) {
       final teamModel = pickRandomTeamModel();
 
-      final keepers = selectPlayers(
-        playerType: PlayerType.keeper,
-        count: teamModel.wk,
-      );
-
-      final batsmans = selectPlayers(
-        playerType: PlayerType.batsman,
-        count: teamModel.bt,
+      final defenders = selectPlayers(
+        playerType: PlayerType.defender,
+        count: teamModel.def,
       );
 
       final allRounders = selectPlayers(
         playerType: PlayerType.allRounder,
-        count: teamModel.ar,
+        count: teamModel.all,
       );
 
-      final bowlers = selectPlayers(
-        playerType: PlayerType.bowler,
-        count: teamModel.bl,
+      final raiders = selectPlayers(
+        playerType: PlayerType.raider,
+        count: teamModel.rai,
       );
 
-      final List<Player> team = [
-        ...keepers,
-        ...batsmans,
-        ...allRounders,
-        ...bowlers
-      ];
+      final List<Player> team = [...defenders, ...allRounders, ...raiders];
 
       selectedTeams.add(team);
       count--;
@@ -101,8 +79,10 @@ class TeamBuilder {
         .length;
   }
 
-  List<Player> selectPlayers(
-      {required PlayerType playerType, required int count}) {
+  List<Player> selectPlayers({
+    required PlayerType playerType,
+    required int count,
+  }) {
     final List<Player> selectedPlayers = [];
     final players = playersModel.playersByPlayerType(playerType: playerType);
 
@@ -134,20 +114,18 @@ class TeamBuilder {
   }
 
   TeamModel pickRandomTeamModel() {
-    final moreThanThreeAllRounder = allRounderCount >= 3;
+    int raiCount = 0;
+    int alCount = 0;
 
-    int blCount = battingPitch
-        ? pickRandom(moreThanThreeAllRounder ? 2 : 3, 4)
-        : pickRandom(moreThanThreeAllRounder ? 3 : 4, 5);
+    while (raiCount + alCount < 3) {
+      raiCount = pickRandom(1, 3);
 
-    int alCount = pickRandom(
-        allRounderCount >= 4 ? 2 : pickRandom(1, 2), allRounderCount);
+      alCount = pickRandom(1, 2);
+    }
 
-    int wkCount = pickRandom(1, keeperCount);
+    int defCount = 7 - raiCount - alCount;
 
-    int btCount = 11 - blCount - alCount - wkCount;
-
-    return TeamModel(wk: wkCount, bt: btCount, ar: alCount, bl: blCount);
+    return TeamModel(def: defCount, all: alCount, rai: raiCount);
   }
 
   int pickRandom(int min, int max) {

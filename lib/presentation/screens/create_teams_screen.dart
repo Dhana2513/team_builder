@@ -3,7 +3,6 @@ import 'package:team_builder/constants/paddings.dart';
 
 import '../../core/widgets/common_app_bar.dart';
 import '../../models/team_builder.dart';
-import '../../models/type/pitch_type.dart';
 import '../../models/type/team_type.dart';
 import '../widgets/playing_teams.dart';
 
@@ -19,9 +18,7 @@ class CreateTeamsScreen extends StatefulWidget {
 class _CreateTeamsScreenState extends State<CreateTeamsScreen> {
   TeamType? teamType1;
   TeamType? teamType2;
-  PitchType? pitchType;
   double numberOfTeams = 10;
-  final averageScoreController = TextEditingController();
 
   Widget get teamDropDowns => Row(
         children: [
@@ -77,31 +74,6 @@ class _CreateTeamsScreenState extends State<CreateTeamsScreen> {
           children: [
             teamDropDowns,
             paddingExtraLarge,
-            DropdownButtonFormField<PitchType>(
-              decoration: const InputDecoration(labelText: 'Pitch Type'),
-              value: pitchType,
-              items: pitchTypes.map((PitchType value) {
-                return DropdownMenuItem<PitchType>(
-                  value: value,
-                  child: Text(value.name),
-                );
-              }).toList(),
-              onChanged: (type) {
-                setState(() {
-                  pitchType = type;
-                });
-              },
-            ),
-            paddingExtraLarge,
-            TextField(
-              controller: averageScoreController,
-              decoration: const InputDecoration(
-                labelText: 'Average Score',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
-            ),
-            paddingExtraLarge,
             const Text('Number of teams : '),
             Slider(
               value: numberOfTeams,
@@ -131,13 +103,7 @@ class _CreateTeamsScreenState extends State<CreateTeamsScreen> {
   }
 
   void validateAndCreateTeams() {
-    final averageScore = averageScoreController.text.trim();
-
-    if (teamType1 == null ||
-        teamType2 == null ||
-        teamType1 == teamType2 ||
-        pitchType == null ||
-        averageScore.isEmpty) {
+    if (teamType1 == null || teamType2 == null || teamType1 == teamType2) {
       showSnackBar(message: 'Fill all fields.');
       return;
     }
@@ -145,9 +111,7 @@ class _CreateTeamsScreenState extends State<CreateTeamsScreen> {
     TeamBuilder(
       teamType1: teamType1!,
       teamType2: teamType2!,
-      pitchType: pitchType!,
       numberOfTeams: numberOfTeams.toInt(),
-      averageScore: int.parse(averageScore),
     ).build();
 
     showSnackBar(message: 'Team building in progress...');

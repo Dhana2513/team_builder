@@ -41,7 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () => navigateTo(routeName: AddPlayerScreen.routeName),
         child: const Icon(Icons.person_add_alt),
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.white10,
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [

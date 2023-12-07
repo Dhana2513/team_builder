@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:team_builder/core/dbutil.dart';
 import 'package:team_builder/models/entity/player.dart';
+import 'package:team_builder/models/type/captaincy_type.dart';
 import 'package:team_builder/models/type/player_type.dart';
 import 'package:team_builder/presentation/screens/add_player_screen.dart';
 
@@ -30,7 +31,7 @@ class PlayerRowTile extends StatelessWidget {
           color: Colors.black54,
         ),
         Text(
-          player.name,
+          '${player.name} ${player.captaincyType.shortName}',
           style: textStyle.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -83,7 +84,7 @@ class PlayerRowTile extends StatelessWidget {
   }
 
   void deletePlayer() {
-    DbUtil.instance.delete(id: player.id);
+    DbUtil.instance.deletePlayer(id: player.id);
     onPlayerUpdate?.call();
   }
 }

@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team_builder/models/entity/match_entity.dart';
 import 'package:team_builder/models/entity/player.dart';
+
+import '../models/type/captaincy_type.dart';
 
 class DbUtil {
   DbUtil._();
@@ -30,7 +34,7 @@ class DbUtil {
     return _playersCollection.add(player.toJson());
   }
 
-  void delete({String? id}) {
+  void deletePlayer({String? id}) {
     _playersCollection.doc(id).delete();
   }
 
@@ -38,34 +42,76 @@ class DbUtil {
     required String matchName,
     required List<List<Player>> selectedTeams,
   }) {
-    final list = selectedTeams
-        .map((list) => list.map((player) => player.toJson()).toList())
-        .toList();
+    print('ddd addMatch $matchName');
+    print('ddd selectedTeams $selectedTeams');
+
+    final random = Random();
+
+    Player selectCaptain({required List<Player> team}) {
+      final players = [...team];
+      final List<Player> allPlayers = [];
+      players.removeWhere((player) => player.captaincyRating <= 20);
+
+      for (final player in players) {
+        for (int i = 1; i < player.captaincyRating; i += 10) {
+          allPlayers.add(player);
+        }
+      }
+
+      return allPlayers[random.nextInt(allPlayers.length)];
+    }
+
+    final list = selectedTeams.map((team) {
+      final captain = selectCaptain(team: team);
+      Player viceCaptain = selectCaptain(team: team);
+
+      while (captain == viceCaptain) {
+        viceCaptain = selectCaptain(team: team);
+      }
+
+      captain.captaincyType = CaptaincyType.captain;
+      viceCaptain.captaincyType = CaptaincyType.viceCaptain;
+
+      final json = team.map((player) => player.toJson()).toList();
+
+      captain.captaincyType = CaptaincyType.none;
+      viceCaptain.captaincyType = CaptaincyType.none;
+
+      return json;
+    }).toList();
 
     _matchesCollection.add({matchName: jsonEncode(list)});
   }
 
-  Future<List<MatchEntity>> getAllMatches() async {
-    print('getAllMatches called');
-    final snapshot = await _matchesCollection.get();
+  final matchStreamController = StreamController<List<MatchEntity>>();
 
-    print('getAllMatches snapshot : $snapshot');
+  Stream<List<MatchEntity>> get matchStream => matchStreamController.stream;
 
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      final matchName = data.keys.first;
-      print('getAllMatches data : data');
+  void getAllMatches() async {
+    final snapshots = _matchesCollection.snapshots();
 
-      final result = jsonDecode(data[matchName]);
+    snapshots.listen((snapshot) {
+      final data = snapshot.docs.map((doc) {
+        final data = doc.data();
+        final matchName = data.keys.first;
 
-      final matchEntry = MatchEntity.fromJson(
-        id: doc.id,
-        matchName: matchName,
-        jsonList: result,
-      );
+        final result = jsonDecode(data[matchName]);
 
-      return matchEntry;
-    }).toList();
+        final matchEntry = MatchEntity.fromJson(
+          id: doc.id,
+          matchName: matchName,
+          jsonList: result,
+        );
+
+        return matchEntry;
+      }).toList();
+
+      matchStreamController.sink.add(data);
+    });
+  }
+
+  void deleteMatch({String? id}) {
+    _matchesCollection.doc(id).delete();
   }
 }
 

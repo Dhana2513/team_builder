@@ -1,13 +1,11 @@
 class TeamModel {
-  final int wk;
-  final int bt;
-  final int ar;
-  final int bl;
+  final int rai;
+  final int def;
+  final int all;
 
   TeamModel({
-    required this.wk,
-    required this.bt,
-    required this.ar,
-    required this.bl,
+    required this.rai,
+    required this.def,
+    required this.all,
   });
 }

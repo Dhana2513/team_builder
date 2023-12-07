@@ -14,27 +14,22 @@ class PlayersModel {
     final teamPlayers =
         players.where((player) => player.teamType == teamType).toList();
 
-    final wicketKeepers = teamPlayers
-        .where((player) => player.playerType == PlayerType.keeper)
+    final raiders = teamPlayers
+        .where((player) => player.playerType == PlayerType.raider)
         .toList();
 
-    final batsmans = teamPlayers
-        .where((player) => player.playerType == PlayerType.batsman)
+    final defenders = teamPlayers
+        .where((player) => player.playerType == PlayerType.defender)
         .toList();
 
     final allRounders = teamPlayers
         .where((player) => player.playerType == PlayerType.allRounder)
         .toList();
 
-    final bowlers = teamPlayers
-        .where((player) => player.playerType == PlayerType.bowler)
-        .toList();
-
     teamPlayers.clear();
-    teamPlayers.addAll(wicketKeepers);
-    teamPlayers.addAll(batsmans);
+    teamPlayers.addAll(defenders);
     teamPlayers.addAll(allRounders);
-    teamPlayers.addAll(bowlers);
+    teamPlayers.addAll(raiders);
 
     return teamPlayers;
   }

@@ -1,15 +1,13 @@
 import 'player.dart';
 
 class Team {
-  final List<Player> batsmans;
-  final List<Player> wicketKeepers;
+  final List<Player> defender;
+  final List<Player> raider;
   final List<Player> allRounders;
-  final List<Player> bowlers;
 
   Team({
-    required this.batsmans,
-    required this.wicketKeepers,
+    required this.defender,
+    required this.raider,
     required this.allRounders,
-    required this.bowlers,
   });
 }

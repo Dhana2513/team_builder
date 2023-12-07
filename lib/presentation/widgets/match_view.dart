@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:team_builder/constants/paddings.dart';
 import 'package:team_builder/core/dbutil.dart';
-import 'package:team_builder/models/entity/player.dart';
 
 import '../../models/entity/match_entity.dart';
-import 'player_row_tile.dart';
+import 'match_teams_view.dart';
 
 class MatchView extends StatefulWidget {
   const MatchView({Key? key}) : super(key: key);
@@ -14,38 +12,50 @@ class MatchView extends StatefulWidget {
 }
 
 class _MatchViewState extends State<MatchView> {
-  late final Future<List<MatchEntity>> futureMatches;
-
   @override
   void initState() {
     super.initState();
-    futureMatches = DbUtil.instance.getAllMatches();
+    DbUtil.instance.getAllMatches();
   }
 
-  List<Widget> getTeam(List<Player> team, int index) {
-    return [
-      Text('Team : ${index + 1}'),
-      padding,
-      for (int i = 0; i < team.length; i++) PlayerRowTile(player: team[i]),
-      paddingLarge,
-    ];
-  }
-
-  List<Widget> getMatchDetails(MatchEntity match) {
-    return [
-      Text(match.matchName),
-      padding,
-      for (int i = 0; i < match.teams.length; i++) ...getTeam(match.teams[i], i)
-    ];
+  Widget listTile(MatchEntity match) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      color: Colors.white,
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return MatchTeamsView(match: match);
+              }));
+            },
+            child: Center(
+              child: Text(
+                match.matchName,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              DbUtil.instance.deleteMatch(id: match.id);
+            },
+            icon: Icon(
+              Icons.delete,
+              color: Colors.grey.shade700,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<MatchEntity>>(
-      future: futureMatches,
+    return StreamBuilder<List<MatchEntity>>(
+      stream: DbUtil.instance.matchStream,
       builder: (context, snapshot) {
-        print('_MatchViewState snapshot : ${snapshot.data}');
-
         if (snapshot.data == null) {
           return const SizedBox.shrink();
         }
@@ -54,8 +64,7 @@ class _MatchViewState extends State<MatchView> {
 
         return Column(
           children: [
-            for (int i = 0; i < matches.length; i++)
-              ...getMatchDetails(matches[i])
+            for (int i = 0; i < matches.length; i++) listTile(matches[i])
           ],
         );
       },

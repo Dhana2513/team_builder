@@ -4,7 +4,6 @@ import '../../constants/paddings.dart';
 import '../../core/dbutil.dart';
 import '../../core/widgets/common_app_bar.dart';
 import '../../models/entity/player.dart';
-import '../../models/type/bowling_type.dart';
 import '../../models/type/player_type.dart';
 import '../../models/type/team_type.dart';
 
@@ -20,13 +19,9 @@ class AddPlayerScreen extends StatefulWidget {
 class _AddPlayerScreenState extends State<AddPlayerScreen> {
   TeamType? teamType;
   PlayerType? playerType;
-  BowlingType? bowlingType;
   TextEditingController playerNameController = TextEditingController();
   double playerRating = 0;
   double captaincyRating = 0;
-
-  bool get canBowl =>
-      [PlayerType.allRounder, PlayerType.bowler].contains(playerType);
 
   bool get modifyPlayer {
     return player != null;
@@ -40,7 +35,6 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
       playerNameController.text = player!.name;
       teamType = player!.teamType;
       playerType = player!.playerType;
-      bowlingType = player!.bowlingType;
       captaincyRating = player!.captaincyRating.toDouble();
       playerRating = player!.playerRating.toDouble();
     }
@@ -103,24 +97,6 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
               },
             ),
             paddingLarge,
-            if (canBowl) ...[
-              DropdownButtonFormField<BowlingType>(
-                decoration: const InputDecoration(labelText: 'Bowling Type'),
-                value: bowlingType,
-                items: bowlingTypes.map((BowlingType value) {
-                  return DropdownMenuItem<BowlingType>(
-                    value: value,
-                    child: Text(value.name),
-                  );
-                }).toList(),
-                onChanged: (type) {
-                  setState(() {
-                    bowlingType = type;
-                  });
-                },
-              ),
-              paddingLarge,
-            ],
             const Text('Player Ratting'),
             Slider(
               value: playerRating,
@@ -159,10 +135,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
 
   void validateAndSubmit() {
     final playerName = playerNameController.text.trim();
-    if (teamType == null ||
-        playerName.isEmpty ||
-        playerType == null ||
-        (canBowl && bowlingType == null)) {
+    if (teamType == null || playerName.isEmpty || playerType == null) {
       showSnackBar(message: 'Fill all fields');
       return;
     } else {
@@ -170,7 +143,6 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
         teamType: teamType!,
         name: playerName,
         playerType: playerType!,
-        bowlingType: bowlingType ?? BowlingType.none,
         playerRating: playerRating.toInt(),
         captaincyRating: captaincyRating.toInt(),
       );
