@@ -5,7 +5,7 @@ import 'package:team_builder/models/type/captaincy_type.dart';
 import 'package:team_builder/models/type/player_type.dart';
 import 'package:team_builder/presentation/screens/add_player_screen.dart';
 
-class PlayerRowTile extends StatelessWidget {
+class PlayerRowTile extends StatefulWidget {
   const PlayerRowTile({
     Key? key,
     required this.player,
@@ -15,6 +15,11 @@ class PlayerRowTile extends StatelessWidget {
   final Player player;
   final VoidCallback? onPlayerUpdate;
 
+  @override
+  State<PlayerRowTile> createState() => _PlayerRowTileState();
+}
+
+class _PlayerRowTileState extends State<PlayerRowTile> {
   @override
   Widget build(BuildContext context) {
     const textStyle = TextStyle(
@@ -27,24 +32,37 @@ class PlayerRowTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Icon(
-          player.playerType.icon,
+          widget.player.playerType.icon,
           color: Colors.black54,
         ),
         Text(
-          '${player.name} ${player.captaincyType.shortName}',
+          '${widget.player.name} ${widget.player.captaincyType.shortName}',
           style: textStyle.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
-          'PR : ${player.playerRating}%',
+          'PR : ${widget.player.playerRating}%',
           style: textStyle,
         ),
         Text(
-          'CR : ${player.captaincyRating}%',
+          'CR : ${widget.player.captaincyRating}%',
           style: textStyle,
         ),
-        if (onPlayerUpdate != null) ...[
+        Row(
+          children: [
+            const Text('Must Have'),
+            Switch(
+                value: widget.player.mustHave,
+                onChanged: (value) {
+                  setState(() {
+                    widget.player.mustHave = value;
+                  });
+                  updatePlayerStatus();
+                })
+          ],
+        ),
+        if (widget.onPlayerUpdate != null) ...[
           IconButton(
             onPressed: () => navigateToAddPlayerScreen(context: context),
             icon: const Padding(
@@ -73,18 +91,23 @@ class PlayerRowTile extends StatelessWidget {
   void navigateToAddPlayerScreen({required BuildContext context}) async {
     final refresh = await Navigator.of(context).pushNamed(
       AddPlayerScreen.routeName,
-      arguments: player,
+      arguments: widget.player,
     );
 
     if (refresh is bool?) {
       if (refresh == true) {
-        onPlayerUpdate?.call();
+        widget.onPlayerUpdate?.call();
       }
     }
   }
 
   void deletePlayer() {
-    DbUtil.instance.deletePlayer(id: player.id);
-    onPlayerUpdate?.call();
+    DbUtil.instance.deletePlayer(id: widget.player.id);
+    widget.onPlayerUpdate?.call();
+  }
+
+  void updatePlayerStatus() {
+    DbUtil.instance
+        .updatePlayer(docID: widget.player.id!, player: widget.player);
   }
 }

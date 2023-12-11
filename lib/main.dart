@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:team_builder/presentation/screens/add_player_screen.dart';
 import 'package:team_builder/presentation/screens/all_players_screen.dart';
 import 'package:team_builder/presentation/screens/create_teams_screen.dart';
+import 'package:team_builder/presentation/screens/match_teams_view_screen.dart';
+import 'package:team_builder/presentation/screens/validate_teams_screen.dart';
+import 'package:team_builder/presentation/screens/validated_teams_screen.dart';
 
 import 'firebase_options.dart';
 import 'presentation/home_screen.dart';
@@ -37,6 +40,9 @@ class MyApp extends StatelessWidget {
         AddPlayerScreen.routeName: (_) => const AddPlayerScreen(),
         AllPlayersScreen.routeName: (_) => const AllPlayersScreen(),
         CreateTeamsScreen.routeName: (_) => const CreateTeamsScreen(),
+        MatchTeamsViewScreen.routeName: (_) => const MatchTeamsViewScreen(),
+        ValidateTeamsScreen.routeName: (_) => const ValidateTeamsScreen(),
+        ValidatedTeamsScreen.routeName: (_) => const ValidatedTeamsScreen(),
       },
     );
   }

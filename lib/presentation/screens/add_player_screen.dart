@@ -28,6 +28,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
   }
 
   Player? player;
+  bool mustHave = false;
 
   void setValues(BuildContext context) {
     player = ModalRoute.of(context)!.settings.arguments as Player?;
@@ -123,6 +124,21 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
               },
             ),
             paddingLarge,
+            Row(
+              children: [
+                const Text('Must Have'),
+                padding,
+                Switch(
+                  value: mustHave,
+                  onChanged: (value) {
+                    setState(() {
+                      mustHave = value;
+                    });
+                  },
+                )
+              ],
+            ),
+            paddingLarge,
             ElevatedButton(
               onPressed: validateAndSubmit,
               child: Text(modifyPlayer ? 'Update' : 'Add'),
@@ -144,6 +160,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
         name: playerName,
         playerType: playerType!,
         playerRating: playerRating.toInt(),
+        mustHave: mustHave,
         captaincyRating: captaincyRating.toInt(),
       );
 
@@ -159,6 +176,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
 
         setState(() {
           playerNameController.text = '';
+          mustHave = false;
         });
 
         showSnackBar(message: 'Record added');

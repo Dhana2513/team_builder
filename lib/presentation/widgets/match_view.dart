@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:team_builder/constants/paddings.dart';
 import 'package:team_builder/core/dbutil.dart';
+import 'package:team_builder/presentation/screens/validate_teams_screen.dart';
+import 'package:team_builder/presentation/screens/validated_teams_screen.dart';
 
 import '../../models/entity/match_entity.dart';
-import 'match_teams_view.dart';
+import '../screens/match_teams_view_screen.dart';
 
 class MatchView extends StatefulWidget {
   const MatchView({Key? key}) : super(key: key);
@@ -26,9 +29,8 @@ class _MatchViewState extends State<MatchView> {
         children: [
           InkWell(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return MatchTeamsView(match: match);
-              }));
+              Navigator.of(context)
+                  .pushNamed(MatchTeamsViewScreen.routeName, arguments: match);
             },
             child: Center(
               child: Text(
@@ -37,6 +39,18 @@ class _MatchViewState extends State<MatchView> {
               ),
             ),
           ),
+          paddingLarge,
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  match.validated
+                      ? ValidatedTeamsScreen.routeName
+                      : ValidateTeamsScreen.routeName,
+                  arguments: match,
+                );
+              },
+              child: const Text('Validate')),
+          paddingLarge,
           IconButton(
             onPressed: () {
               DbUtil.instance.deleteMatch(id: match.id);

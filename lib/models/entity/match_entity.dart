@@ -1,30 +1,34 @@
-import 'package:team_builder/models/entity/player.dart';
+import 'package:team_builder/models/entity/team_entity.dart';
 
 class MatchEntity {
   final String id;
   final String matchName;
-  final List<List<Player>> teams;
+  final bool validated;
+  final List<TeamEntity> teams;
 
   MatchEntity({
     required this.id,
     required this.matchName,
+    required this.validated,
     required this.teams,
   });
 
   factory MatchEntity.fromJson({
     required String id,
     required String matchName,
+    required bool validated,
     required List<dynamic> jsonList,
   }) {
-    final List<List<Player>> allTeams = [];
+    final List<TeamEntity> allTeams = [];
     for (final teams in jsonList) {
-      final List<Player> players = [];
-      for (final team in teams) {
-        players.add(Player.fromJson(team));
-      }
-      allTeams.add(players);
+      allTeams.add(TeamEntity.fromJson(teams));
     }
 
-    return MatchEntity(id: id, matchName: matchName, teams: allTeams);
+    return MatchEntity(
+      id: id,
+      matchName: matchName,
+      validated: validated,
+      teams: allTeams,
+    );
   }
 }

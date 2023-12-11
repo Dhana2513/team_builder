@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team_builder/models/entity/match_entity.dart';
 import 'package:team_builder/models/entity/player.dart';
+import 'package:team_builder/models/entity/team_entity.dart';
 
 import '../models/type/captaincy_type.dart';
 
@@ -40,10 +41,9 @@ class DbUtil {
 
   void addMatch({
     required String matchName,
-    required List<List<Player>> selectedTeams,
+    required List<TeamEntity> selectedTeams,
   }) {
-    print('ddd addMatch $matchName');
-    print('ddd selectedTeams $selectedTeams');
+    print('addMatch called');
 
     final random = Random();
 
@@ -62,17 +62,17 @@ class DbUtil {
     }
 
     final list = selectedTeams.map((team) {
-      final captain = selectCaptain(team: team);
-      Player viceCaptain = selectCaptain(team: team);
+      final captain = selectCaptain(team: team.players);
+      Player viceCaptain = selectCaptain(team: team.players);
 
       while (captain == viceCaptain) {
-        viceCaptain = selectCaptain(team: team);
+        viceCaptain = selectCaptain(team: team.players);
       }
 
       captain.captaincyType = CaptaincyType.captain;
       viceCaptain.captaincyType = CaptaincyType.viceCaptain;
 
-      final json = team.map((player) => player.toJson()).toList();
+      final json = team.toJson();
 
       captain.captaincyType = CaptaincyType.none;
       viceCaptain.captaincyType = CaptaincyType.none;
@@ -80,7 +80,24 @@ class DbUtil {
       return json;
     }).toList();
 
-    _matchesCollection.add({matchName: jsonEncode(list)});
+    _matchesCollection.add({
+      matchName: jsonEncode(list),
+      'validated': false,
+    });
+  }
+
+  Future updateMatch({
+    required String docID,
+    required MatchEntity matchEntity,
+  }) {
+    final list = matchEntity.teams.map((team) => team.toJson()).toList();
+
+    return _matchesCollection.doc(docID).update(
+      {
+        matchEntity.matchName: jsonEncode(list),
+        'validated': true,
+      },
+    );
   }
 
   final matchStreamController = StreamController<List<MatchEntity>>();
@@ -93,13 +110,15 @@ class DbUtil {
     snapshots.listen((snapshot) {
       final data = snapshot.docs.map((doc) {
         final data = doc.data();
-        final matchName = data.keys.first;
+        final matchName =
+            data.keys.toList().firstWhere((element) => element != 'validated');
 
         final result = jsonDecode(data[matchName]);
 
         final matchEntry = MatchEntity.fromJson(
           id: doc.id,
           matchName: matchName,
+          validated: data['validated'],
           jsonList: result,
         );
 

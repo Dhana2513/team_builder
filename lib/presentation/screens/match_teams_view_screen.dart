@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:team_builder/models/entity/team_entity.dart';
 
 import '../../constants/paddings.dart';
 import '../../models/entity/match_entity.dart';
-import '../../models/entity/player.dart';
-import 'player_row_tile.dart';
+import '../widgets/player_row_tile.dart';
 
-class MatchTeamsView extends StatelessWidget {
-  const MatchTeamsView({Key? key, required this.match}) : super(key: key);
+class MatchTeamsViewScreen extends StatefulWidget {
+  const MatchTeamsViewScreen({Key? key}) : super(key: key);
+  static const routeName = '/matchTeamsView';
 
-  final MatchEntity match;
+  @override
+  State<MatchTeamsViewScreen> createState() => _MatchTeamsViewScreenState();
+}
 
-  List<Widget> getTeam(List<Player> team, int index) {
+class _MatchTeamsViewScreenState extends State<MatchTeamsViewScreen> {
+  MatchEntity? matchEntity;
+
+  MatchEntity get match {
+    matchEntity ??= ModalRoute.of(context)!.settings.arguments as MatchEntity;
+
+    return matchEntity!;
+  }
+
+  List<Widget> getTeam(TeamEntity team, int index) {
     return [
       Text('Team : ${index + 1}'),
       padding,
-      for (int i = 0; i < team.length; i++) PlayerRowTile(player: team[i]),
+      for (int i = 0; i < team.players.length; i++)
+        PlayerRowTile(player: team.players[i]),
       paddingLarge,
     ];
   }

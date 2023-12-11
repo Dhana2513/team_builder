@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:team_builder/core/dbutil.dart';
 import 'package:team_builder/models/entity/player.dart';
+import 'package:team_builder/models/entity/team_entity.dart';
 import 'package:team_builder/models/entity/team_model.dart';
 import 'package:team_builder/models/players_model.dart';
 import 'package:team_builder/models/type/player_type.dart';
@@ -24,6 +25,8 @@ class TeamBuilder {
   late final PlayersModel playersModel;
 
   int allRounderCount = 0;
+  int mustHaveRaiderCount = 1;
+  int mustHaveAllRounderCount = 1;
 
   void build() async {
     final allTeamPlayers = await DbUtil.instance.allPlayers();
@@ -38,31 +41,65 @@ class TeamBuilder {
 
     allRounderCount = playerCount(PlayerType.allRounder);
 
+    mustHaveRaiderCount = playersModel.players
+        .where((element) =>
+            element.playerType == PlayerType.raider && element.mustHave)
+        .toList()
+        .length;
+
+    mustHaveRaiderCount = mustHaveRaiderCount == 0 ? 1 : mustHaveRaiderCount;
+
+    mustHaveAllRounderCount = playersModel.players
+        .where((element) =>
+            element.playerType == PlayerType.allRounder && element.mustHave)
+        .toList()
+        .length;
+
+    mustHaveAllRounderCount =
+        mustHaveAllRounderCount == 0 ? 1 : mustHaveAllRounderCount;
+
     int count = numberOfTeams;
 
-    List<List<Player>> selectedTeams = [];
+    List<TeamEntity> selectedTeams = [];
 
     while (count != 0) {
       final teamModel = pickRandomTeamModel();
+      print('teamModel.def : ${teamModel.def}');
+      print('teamModel.all : ${teamModel.all}');
+      print('teamModel.rai : ${teamModel.rai}');
 
       final defenders = selectPlayers(
         playerType: PlayerType.defender,
         count: teamModel.def,
+        mustHavePlayers: playersModel.players
+            .where((element) =>
+                element.playerType == PlayerType.defender && element.mustHave)
+            .toList(),
       );
 
       final allRounders = selectPlayers(
         playerType: PlayerType.allRounder,
         count: teamModel.all,
+        mustHavePlayers: playersModel.players
+            .where((element) =>
+                element.playerType == PlayerType.allRounder && element.mustHave)
+            .toList(),
       );
 
       final raiders = selectPlayers(
         playerType: PlayerType.raider,
         count: teamModel.rai,
+        mustHavePlayers: playersModel.players
+            .where((element) =>
+                element.playerType == PlayerType.raider && element.mustHave)
+            .toList(),
       );
 
       final List<Player> team = [...defenders, ...allRounders, ...raiders];
 
-      selectedTeams.add(team);
+      print('team : $team');
+
+      selectedTeams.add(TeamEntity(players: team));
       count--;
     }
 
@@ -82,8 +119,11 @@ class TeamBuilder {
   List<Player> selectPlayers({
     required PlayerType playerType,
     required int count,
+    required List<Player> mustHavePlayers,
   }) {
-    final List<Player> selectedPlayers = [];
+    final List<Player> selectedPlayers = [...mustHavePlayers];
+    count -= mustHavePlayers.length;
+
     final players = playersModel.playersByPlayerType(playerType: playerType);
 
     final allPlayers = buildPlayersListByRatting(players: players);
@@ -118,9 +158,9 @@ class TeamBuilder {
     int alCount = 0;
 
     while (raiCount + alCount < 3) {
-      raiCount = pickRandom(1, 3);
+      raiCount = pickRandom(mustHaveRaiderCount, 3);
 
-      alCount = pickRandom(1, 2);
+      alCount = pickRandom(mustHaveAllRounderCount, 2);
     }
 
     int defCount = 7 - raiCount - alCount;
@@ -129,6 +169,11 @@ class TeamBuilder {
   }
 
   int pickRandom(int min, int max) {
-    return min + random.nextInt(max - min);
+    final randValue = random.nextInt(100);
+
+    final mod = randValue % max;
+
+    final val = min + mod;
+    return val > max ? max : val;
   }
 }
