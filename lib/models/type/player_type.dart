@@ -27,11 +27,11 @@ extension PlayerTypeX on PlayerType {
   IconData get icon {
     switch (this) {
       case PlayerType.raider:
-        return Icons.battery_full_rounded;
+        return Icons.whatshot;
       case PlayerType.defender:
-        return Icons.sports_mma;
+        return Icons.anchor;
       case PlayerType.allRounder:
-        return Icons.sports_cricket_sharp;
+        return Icons.sports_kabaddi;
     }
   }
 

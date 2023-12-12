@@ -22,46 +22,53 @@ class _MatchViewState extends State<MatchView> {
   }
 
   Widget listTile(MatchEntity match) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      color: Colors.white,
-      child: Row(
-        children: [
-          InkWell(
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(MatchTeamsViewScreen.routeName, arguments: match);
-            },
-            child: Center(
-              child: Text(
-                match.matchName,
-                style: Theme.of(context).textTheme.titleMedium,
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          color: Colors.white,
+          child: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    match.validated
+                        ? ValidatedTeamsScreen.routeName
+                        : MatchTeamsViewScreen.routeName,
+                    arguments: match,
+                  );
+                },
+                child: Center(
+                  child: Text(
+                    match.matchName,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
               ),
-            ),
+              paddingLarge,
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                      ValidateTeamsScreen.routeName,
+                      arguments: match,
+                    );
+                  },
+                  child: const Text('Validate')),
+              paddingLarge,
+              IconButton(
+                onPressed: () {
+                  DbUtil.instance.deleteMatch(id: match.id);
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.grey.shade700,
+                ),
+              )
+            ],
           ),
-          paddingLarge,
-          ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(
-                  match.validated
-                      ? ValidatedTeamsScreen.routeName
-                      : ValidateTeamsScreen.routeName,
-                  arguments: match,
-                );
-              },
-              child: const Text('Validate')),
-          paddingLarge,
-          IconButton(
-            onPressed: () {
-              DbUtil.instance.deleteMatch(id: match.id);
-            },
-            icon: Icon(
-              Icons.delete,
-              color: Colors.grey.shade700,
-            ),
-          )
-        ],
-      ),
+        ),
+        Container(height: 2, color: Colors.grey.shade200),
+      ],
     );
   }
 
@@ -77,9 +84,7 @@ class _MatchViewState extends State<MatchView> {
         final matches = snapshot.data!;
 
         return Column(
-          children: [
-            for (int i = 0; i < matches.length; i++) listTile(matches[i])
-          ],
+          children: [for (final match in matches) listTile(match)],
         );
       },
     );

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team_builder/constants/constants.dart';
 import 'package:team_builder/models/entity/match_entity.dart';
 import 'package:team_builder/models/entity/player.dart';
 import 'package:team_builder/models/entity/team_entity.dart';
@@ -82,7 +83,7 @@ class DbUtil {
 
     _matchesCollection.add({
       matchName: jsonEncode(list),
-      'validated': false,
+      Constants.constants.validated: false,
     });
   }
 
@@ -95,7 +96,7 @@ class DbUtil {
     return _matchesCollection.doc(docID).update(
       {
         matchEntity.matchName: jsonEncode(list),
-        'validated': true,
+        Constants.constants.validated: true,
       },
     );
   }
@@ -110,15 +111,16 @@ class DbUtil {
     snapshots.listen((snapshot) {
       final data = snapshot.docs.map((doc) {
         final data = doc.data();
-        final matchName =
-            data.keys.toList().firstWhere((element) => element != 'validated');
+        final matchName = data.keys
+            .toList()
+            .firstWhere((element) => element != Constants.constants.validated);
 
         final result = jsonDecode(data[matchName]);
 
         final matchEntry = MatchEntity.fromJson(
           id: doc.id,
           matchName: matchName,
-          validated: data['validated'],
+          validated: data[Constants.constants.validated],
           jsonList: result,
         );
 

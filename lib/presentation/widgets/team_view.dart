@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:team_builder/models/entity/player.dart';
 import 'package:team_builder/models/type/team_type.dart';
+import 'package:team_builder/presentation/widgets/player_table.dart';
 
 import '../../constants/paddings.dart';
 import '../../models/players_model.dart';
-import 'player_row_tile.dart';
 
-class TeamView extends StatelessWidget {
+class TeamView extends StatefulWidget {
   const TeamView({
     Key? key,
     required this.players,
@@ -14,8 +14,13 @@ class TeamView extends StatelessWidget {
   }) : super(key: key);
 
   final List<Player> players;
-  final VoidCallback onPlayerUpdate;
+  final VoidCallback? onPlayerUpdate;
 
+  @override
+  State<TeamView> createState() => _TeamViewState();
+}
+
+class _TeamViewState extends State<TeamView> {
   Widget getItem(
     BuildContext context,
     TeamType teamType,
@@ -28,11 +33,10 @@ class TeamView extends StatelessWidget {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         padding,
-        for (int i = 0; i < teamPlayers.length; i++)
-          PlayerRowTile(
-            player: teamPlayers[i],
-            onPlayerUpdate: onPlayerUpdate,
-          ),
+        PlayerTable(
+          players: teamPlayers,
+          onPlayerUpdate: widget.onPlayerUpdate,
+        ),
         paddingLarge,
       ],
     );
@@ -40,7 +44,7 @@ class TeamView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playersModel = PlayersModel(players: players);
+    final playersModel = PlayersModel(players: widget.players);
     final teams = playersModel.allTeamTypes();
     return Column(
       children: teams

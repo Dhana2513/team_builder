@@ -77,8 +77,8 @@ class _CreateTeamsScreenState extends State<CreateTeamsScreen> {
             const Text('Number of teams : '),
             Slider(
               value: numberOfTeams,
-              max: 100,
-              divisions: 10,
+              max: 200,
+              divisions: 20,
               label: numberOfTeams.round().toString(),
               onChanged: (double value) {
                 setState(() {

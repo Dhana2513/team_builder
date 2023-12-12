@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_builder/models/entity/team_entity.dart';
-import 'package:team_builder/models/type/captaincy_type.dart';
-import 'package:team_builder/models/type/player_type.dart';
+import 'package:team_builder/presentation/widgets/player_table.dart';
 
 import '../../constants/paddings.dart';
 import '../../models/entity/match_entity.dart';
@@ -27,11 +26,6 @@ class _ValidatedTeamsScreenState extends State<ValidatedTeamsScreen> {
   int highestPointsTeam = 0;
 
   List<Widget> getTeam(TeamEntity team, int index) {
-    const textStyle = TextStyle(
-      fontSize: 13,
-      color: Colors.black87,
-    );
-
     if (highestPoints < team.points!) {
       highestPoints = team.points!;
       highestPointsTeam = index + 1;
@@ -40,26 +34,7 @@ class _ValidatedTeamsScreenState extends State<ValidatedTeamsScreen> {
     return [
       Text('Team : ${index + 1}  Points : ${team.points}'),
       padding,
-      for (final player in team.players)
-        Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(
-                player.playerType.icon,
-                color: Colors.black54,
-              ),
-              Text(
-                '${player.name} ${player.captaincyType.shortName}',
-                style: textStyle.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'Points : ${player.points}',
-                style: textStyle,
-              ),
-            ]),
+      PlayerTable(players: team.players),
       paddingLarge,
     ];
   }

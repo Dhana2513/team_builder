@@ -3,7 +3,7 @@ import 'package:team_builder/models/entity/team_entity.dart';
 
 import '../../constants/paddings.dart';
 import '../../models/entity/match_entity.dart';
-import '../widgets/player_row_tile.dart';
+import '../widgets/player_table.dart';
 
 class MatchTeamsViewScreen extends StatefulWidget {
   const MatchTeamsViewScreen({Key? key}) : super(key: key);
@@ -26,8 +26,7 @@ class _MatchTeamsViewScreenState extends State<MatchTeamsViewScreen> {
     return [
       Text('Team : ${index + 1}'),
       padding,
-      for (int i = 0; i < team.players.length; i++)
-        PlayerRowTile(player: team.players[i]),
+      PlayerTable(players: team.players),
       paddingLarge,
     ];
   }

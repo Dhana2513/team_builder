@@ -61,7 +61,7 @@ extension TeamTypeX on TeamType {
   String get longName {
     switch (this) {
       case TeamType.gujaratGiants:
-        return 'GujaratGiants';
+        return 'Gujarat Giants';
       case TeamType.uMumba:
         return 'U Mumba';
       case TeamType.tamilThalaivas:
