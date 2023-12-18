@@ -56,9 +56,7 @@ class _MatchViewState extends State<MatchView> {
                   child: const Text('Validate')),
               paddingLarge,
               IconButton(
-                onPressed: () {
-                  DbUtil.instance.deleteMatch(id: match.id);
-                },
+                onPressed: () => showAlertDialog(match),
                 icon: Icon(
                   Icons.delete,
                   color: Colors.grey.shade700,
@@ -86,6 +84,38 @@ class _MatchViewState extends State<MatchView> {
         return Column(
           children: [for (final match in matches) listTile(match)],
         );
+      },
+    );
+  }
+
+  void showAlertDialog(MatchEntity match) {
+    Widget okButton = TextButton(
+      child: const Text("Delete"),
+      onPressed: () {
+        DbUtil.instance.deleteMatch(id: match.id);
+      },
+    );
+
+    Widget cancelButton = TextButton(
+      child: const Text("Cancel"),
+      onPressed: () {},
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Delete Match"),
+      content: Text('Are you sure you want to delete : ${match.matchName}?'),
+      actions: [
+        okButton,
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
       },
     );
   }
