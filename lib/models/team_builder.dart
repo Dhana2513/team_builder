@@ -28,7 +28,31 @@ class TeamBuilder {
   int mustHaveRaiderCount = 1;
   int mustHaveAllRounderCount = 1;
 
-  void build() async {
+  final possibleTeamModels = [
+    TeamModel(def: 2, all: 2, rai: 3),
+    TeamModel(def: 2, all: 2, rai: 3),
+    TeamModel(def: 2, all: 2, rai: 3),
+    //
+    TeamModel(def: 3, all: 2, rai: 2),
+    TeamModel(def: 3, all: 2, rai: 2),
+    TeamModel(def: 3, all: 2, rai: 2),
+    TeamModel(def: 3, all: 2, rai: 2),
+    TeamModel(def: 3, all: 2, rai: 2),
+    //
+    TeamModel(def: 4, all: 2, rai: 1),
+    TeamModel(def: 4, all: 2, rai: 1),
+    //
+    TeamModel(def: 5, all: 1, rai: 1),
+    //
+    TeamModel(def: 4, all: 1, rai: 2),
+    TeamModel(def: 4, all: 1, rai: 2),
+    TeamModel(def: 4, all: 1, rai: 2),
+    //
+    TeamModel(def: 3, all: 1, rai: 3),
+    TeamModel(def: 3, all: 1, rai: 3),
+  ];
+
+  Future<bool> build() async {
     final allTeamPlayers = await DbUtil.instance.allPlayers();
 
     allPlayers.addAll(allTeamPlayers
@@ -55,8 +79,13 @@ class TeamBuilder {
         .toList()
         .length;
 
-    mustHaveAllRounderCount =
-        mustHaveAllRounderCount == 0 ? 1 : mustHaveAllRounderCount;
+    possibleTeamModels
+        .removeWhere((model) => model.all < mustHaveAllRounderCount);
+    possibleTeamModels.removeWhere((model) => model.rai < mustHaveRaiderCount);
+
+    if (solidAllRounders) {
+      possibleTeamModels.removeWhere((model) => model.all <= 1);
+    }
 
     int count = numberOfTeams;
 
@@ -64,9 +93,6 @@ class TeamBuilder {
 
     while (count != 0) {
       final teamModel = pickRandomTeamModel();
-      print('teamModel.def : ${teamModel.def}');
-      print('teamModel.all : ${teamModel.all}');
-      print('teamModel.rai : ${teamModel.rai}');
 
       final defenders = selectPlayers(
         playerType: PlayerType.defender,
@@ -95,18 +121,39 @@ class TeamBuilder {
             .toList(),
       );
 
-      final List<Player> team = [...defenders, ...allRounders, ...raiders];
+      final teamEntity = TeamEntity(players: [
+        ...defenders.map((player) => player.copyWith()).toList(),
+        ...allRounders.map((player) => player.copyWith()).toList(),
+        ...raiders.map((player) => player.copyWith()).toList(),
+      ]);
 
-      print('team : $team');
+      if (teamEntity.validate(teamType1: teamType1, teamType2: teamType2)) {
+        bool selectedTeam = false;
 
-      selectedTeams.add(TeamEntity(players: team));
-      count--;
+        for (var team in selectedTeams) {
+          selectedTeam = team.isSame(teamEntity: teamEntity);
+          if (selectedTeam) {
+            break;
+          }
+        }
+
+        if (!selectedTeam) {
+          selectedTeams.add(teamEntity);
+          count--;
+        } else {
+          print('ddd same team got created');
+        }
+      } else {
+        print('ddd teamEntity.validate failed');
+      }
     }
 
     DbUtil.instance.addMatch(
       matchName: '${teamType1.shortName} vs ${teamType2.shortName}',
       selectedTeams: selectedTeams,
     );
+
+    return true;
   }
 
   int playerCount(PlayerType playerType) {
@@ -145,35 +192,29 @@ class TeamBuilder {
     final List<Player> allPlayers = [];
 
     for (final player in players) {
-      for (int i = 1; i < player.playerRating; i += 10) {
+      for (int i = 1; i < player.playerRating; i += 2) {
         allPlayers.add(player);
       }
     }
 
+    allPlayers.shuffle();
     return allPlayers;
   }
 
-  TeamModel pickRandomTeamModel() {
-    int raiCount = 0;
-    int alCount = 0;
+  bool get solidAllRounders {
+    int ratting = 0;
 
-    while (raiCount + alCount < 3) {
-      raiCount = pickRandom(mustHaveRaiderCount, 3);
-
-      alCount = pickRandom(mustHaveAllRounderCount, 2);
+    for (final player in allPlayers) {
+      if (player.playerType == PlayerType.allRounder) {
+        ratting += player.playerRating;
+      }
     }
 
-    int defCount = 7 - raiCount - alCount;
-
-    return TeamModel(def: defCount, all: alCount, rai: raiCount);
+    return ratting >= 200;
   }
 
-  int pickRandom(int min, int max) {
-    final randValue = random.nextInt(100);
-
-    final mod = randValue % max;
-
-    final val = min + mod;
-    return val > max ? max : val;
+  TeamModel pickRandomTeamModel() {
+    possibleTeamModels.shuffle();
+    return possibleTeamModels[random.nextInt(possibleTeamModels.length)];
   }
 }

@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team_builder/constants/constants.dart';
 import 'package:team_builder/models/entity/match_entity.dart';
 import 'package:team_builder/models/entity/player.dart';
 import 'package:team_builder/models/entity/team_entity.dart';
-
-import '../models/type/captaincy_type.dart';
 
 class DbUtil {
   DbUtil._();
@@ -44,45 +41,9 @@ class DbUtil {
     required String matchName,
     required List<TeamEntity> selectedTeams,
   }) {
-    print('addMatch called');
-
-    final random = Random();
-
-    Player selectCaptain({required List<Player> team}) {
-      final players = [...team];
-      final List<Player> allPlayers = [];
-      players.removeWhere((player) => player.captaincyRating <= 20);
-
-      for (final player in players) {
-        for (int i = 1; i < player.captaincyRating; i += 10) {
-          allPlayers.add(player);
-        }
-      }
-
-      return allPlayers[random.nextInt(allPlayers.length)];
-    }
-
-    final list = selectedTeams.map((team) {
-      final captain = selectCaptain(team: team.players);
-      Player viceCaptain = selectCaptain(team: team.players);
-
-      while (captain == viceCaptain) {
-        viceCaptain = selectCaptain(team: team.players);
-      }
-
-      captain.captaincyType = CaptaincyType.captain;
-      viceCaptain.captaincyType = CaptaincyType.viceCaptain;
-
-      final json = team.toJson();
-
-      captain.captaincyType = CaptaincyType.none;
-      viceCaptain.captaincyType = CaptaincyType.none;
-
-      return json;
-    }).toList();
-
     _matchesCollection.add({
-      matchName: jsonEncode(list),
+      matchName:
+          jsonEncode(selectedTeams.map((team) => team.toJson()).toList()),
       Constants.constants.validated: false,
     });
   }

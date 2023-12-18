@@ -102,19 +102,19 @@ class _CreateTeamsScreenState extends State<CreateTeamsScreen> {
     );
   }
 
-  void validateAndCreateTeams() {
+  void validateAndCreateTeams() async {
     if (teamType1 == null || teamType2 == null || teamType1 == teamType2) {
       showSnackBar(message: 'Fill all fields.');
       return;
     }
 
-    TeamBuilder(
+    showSnackBar(message: 'Team building in progress...');
+
+    await TeamBuilder(
       teamType1: teamType1!,
       teamType2: teamType2!,
       numberOfTeams: numberOfTeams.toInt(),
     ).build();
-
-    showSnackBar(message: 'Team building in progress...');
 
     Navigator.of(context).pop();
   }

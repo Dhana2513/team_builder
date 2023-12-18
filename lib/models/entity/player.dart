@@ -32,6 +32,12 @@ class Player extends Object {
 
   bool get isViceCaptain => captaincyType == CaptaincyType.viceCaptain;
 
+  bool isSame({required Player? player}) {
+    return name == player?.name &&
+        teamType == player?.teamType &&
+        playerType == player?.playerType;
+  }
+
   factory Player.fromJson(Map<String, dynamic> json, {String? id}) {
     return Player(
       id: id,
