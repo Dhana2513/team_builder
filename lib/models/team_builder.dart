@@ -42,8 +42,6 @@ class TeamBuilder {
     TeamModel(def: 4, all: 2, rai: 1),
     TeamModel(def: 4, all: 2, rai: 1),
     //
-    TeamModel(def: 5, all: 1, rai: 1),
-    //
     TeamModel(def: 4, all: 1, rai: 2),
     TeamModel(def: 4, all: 1, rai: 2),
     TeamModel(def: 4, all: 1, rai: 2),
@@ -81,10 +79,22 @@ class TeamBuilder {
 
     possibleTeamModels
         .removeWhere((model) => model.all < mustHaveAllRounderCount);
+
     possibleTeamModels.removeWhere((model) => model.rai < mustHaveRaiderCount);
 
     if (solidAllRounders) {
-      possibleTeamModels.removeWhere((model) => model.all <= 1);
+      possibleTeamModels.removeWhere((model) => model.all == 1);
+    } else if (weakAllRounders) {
+      possibleTeamModels.removeWhere((model) => model.all == 2);
+
+      if (allRounderCount >= 2) {
+        possibleTeamModels.add(TeamModel(def: 3, all: 2, rai: 2));
+        possibleTeamModels.add(TeamModel(def: 2, all: 2, rai: 3));
+      }
+    }
+
+    if (solidRaiders) {
+      possibleTeamModels.removeWhere((model) => model.rai == 1);
     }
 
     int count = numberOfTeams;
@@ -202,15 +212,26 @@ class TeamBuilder {
   }
 
   bool get solidAllRounders {
+    return rattingOfPlayerType(playerType: PlayerType.allRounder) >= 200;
+  }
+
+  bool get weakAllRounders {
+    return rattingOfPlayerType(playerType: PlayerType.allRounder) <= 100;
+  }
+
+  bool get solidRaiders {
+    return rattingOfPlayerType(playerType: PlayerType.raider) >= 250;
+  }
+
+  int rattingOfPlayerType({required PlayerType playerType}) {
     int ratting = 0;
 
     for (final player in allPlayers) {
-      if (player.playerType == PlayerType.allRounder) {
+      if (player.playerType == playerType) {
         ratting += player.playerRating;
       }
     }
-
-    return ratting >= 200;
+    return ratting;
   }
 
   TeamModel pickRandomTeamModel() {
