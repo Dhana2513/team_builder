@@ -82,6 +82,12 @@ class TeamBuilder {
 
     possibleTeamModels.removeWhere((model) => model.rai < mustHaveRaiderCount);
 
+    if (solidRaiders) {
+      possibleTeamModels.removeWhere((model) => model.rai == 1);
+      possibleTeamModels.add(TeamModel(def: 2, all: 2, rai: 3));
+      possibleTeamModels.add(TeamModel(def: 2, all: 1, rai: 3));
+    }
+
     if (solidAllRounders) {
       possibleTeamModels.removeWhere((model) => model.all == 1);
     } else if (weakAllRounders) {
@@ -91,10 +97,6 @@ class TeamBuilder {
         possibleTeamModels.add(TeamModel(def: 3, all: 2, rai: 2));
         possibleTeamModels.add(TeamModel(def: 2, all: 2, rai: 3));
       }
-    }
-
-    if (solidRaiders) {
-      possibleTeamModels.removeWhere((model) => model.rai == 1);
     }
 
     int count = numberOfTeams;
@@ -220,7 +222,7 @@ class TeamBuilder {
   }
 
   bool get solidRaiders {
-    return rattingOfPlayerType(playerType: PlayerType.raider) >= 250;
+    return rattingOfPlayerType(playerType: PlayerType.raider) >= 260;
   }
 
   int rattingOfPlayerType({required PlayerType playerType}) {
