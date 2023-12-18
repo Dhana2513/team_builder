@@ -92,13 +92,16 @@ class _MatchViewState extends State<MatchView> {
     Widget okButton = TextButton(
       child: const Text("Delete"),
       onPressed: () {
+        Navigator.of(context).pop();
         DbUtil.instance.deleteMatch(id: match.id);
       },
     );
 
     Widget cancelButton = TextButton(
       child: const Text("Cancel"),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
     );
 
     // set up the AlertDialog
