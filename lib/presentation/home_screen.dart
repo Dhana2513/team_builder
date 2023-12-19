@@ -33,29 +33,47 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  int clickCount = 0;
+
+  bool get godMode => clickCount >= 5;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(title: 'Team Builder'),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => navigateTo(routeName: AddPlayerScreen.routeName),
-        child: const Icon(Icons.person_add_alt),
+      appBar: CommonAppBar(
+        title: 'Team Builder',
+        onTap: () {
+          clickCount++;
+          if (godMode) {
+            setState(() {});
+          }
+        },
       ),
+      floatingActionButton: godMode
+          ? FloatingActionButton(
+              onPressed: () => navigateTo(routeName: AddPlayerScreen.routeName),
+              child: const Icon(Icons.person_add_alt),
+            )
+          : null,
       body: Container(
         color: Colors.white10,
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            navigationButton(
-              title: 'All Players',
-              routeName: AllPlayersScreen.routeName,
+            if (godMode) ...[
+              navigationButton(
+                title: 'All Players',
+                routeName: AllPlayersScreen.routeName,
+              ),
+              navigationButton(
+                title: 'Create Teams',
+                routeName: CreateTeamsScreen.routeName,
+              ),
+              paddingLarge,
+            ],
+            MatchView(
+              godMode: godMode,
             ),
-            navigationButton(
-              title: 'Create Teams',
-              routeName: CreateTeamsScreen.routeName,
-            ),
-            paddingLarge,
-            const MatchView(),
           ],
         ),
       ),

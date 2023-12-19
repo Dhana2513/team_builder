@@ -8,7 +8,11 @@ import '../../models/entity/match_entity.dart';
 import '../screens/match_teams_view_screen.dart';
 
 class MatchView extends StatefulWidget {
-  const MatchView({Key? key}) : super(key: key);
+  const MatchView({
+    Key? key,
+    required this.godMode,
+  }) : super(key: key);
+  final bool godMode;
 
   @override
   _MatchViewState createState() => _MatchViewState();
@@ -46,22 +50,24 @@ class _MatchViewState extends State<MatchView> {
                 ),
               ),
               paddingLarge,
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(
-                      ValidateTeamsScreen.routeName,
-                      arguments: match,
-                    );
-                  },
-                  child: const Text('Validate')),
-              paddingLarge,
-              IconButton(
-                onPressed: () => showAlertDialog(match),
-                icon: Icon(
-                  Icons.delete,
-                  color: Colors.grey.shade700,
-                ),
-              )
+              if (widget.godMode) ...[
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        ValidateTeamsScreen.routeName,
+                        arguments: match,
+                      );
+                    },
+                    child: const Text('Validate')),
+                paddingLarge,
+                IconButton(
+                  onPressed: () => showAlertDialog(match),
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.grey.shade700,
+                  ),
+                )
+              ],
             ],
           ),
         ),
