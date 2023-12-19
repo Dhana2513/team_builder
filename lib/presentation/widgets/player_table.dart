@@ -30,17 +30,31 @@ class _PlayerTableState extends State<PlayerTable> {
     );
 
     return Table(
+      columnWidths: widget.onPlayerUpdate != null
+          ? {
+              0: FlexColumnWidth(2),
+              1: FlexColumnWidth(3),
+              2: FlexColumnWidth(1),
+              3: FlexColumnWidth(1),
+              4: FlexColumnWidth(2),
+              5: FlexColumnWidth(2),
+              6: FlexColumnWidth(2),
+            }
+          : {
+              0: FlexColumnWidth(2),
+              1: FlexColumnWidth(3),
+              2: FlexColumnWidth(1),
+              3: FlexColumnWidth(1),
+              4: FlexColumnWidth(2),
+              5: FlexColumnWidth(2),
+            },
       children: [
         TableRow(children: [
           const Padding(
             padding: EdgeInsets.only(bottom: 24),
             child: Text(''),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text('Name',
-                style: textStyle.copyWith(fontWeight: FontWeight.w600)),
-          ),
+          Text('Name', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
           Text('PR', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
           Text('CR', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
           if (widget.onPlayerUpdate != null) ...[
