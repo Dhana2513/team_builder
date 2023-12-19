@@ -43,10 +43,8 @@ class _PlayerTableState extends State<PlayerTable> {
           : {
               0: FlexColumnWidth(2),
               1: FlexColumnWidth(3),
-              2: FlexColumnWidth(1),
-              3: FlexColumnWidth(1),
-              4: FlexColumnWidth(2),
-              5: FlexColumnWidth(2),
+              2: FlexColumnWidth(2),
+              3: FlexColumnWidth(2),
             },
       children: [
         TableRow(children: [
@@ -55,9 +53,9 @@ class _PlayerTableState extends State<PlayerTable> {
             child: Text(''),
           ),
           Text('Name', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
-          Text('PR', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
-          Text('CR', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
           if (widget.onPlayerUpdate != null) ...[
+            Text('PR', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
+            Text('CR', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
             Text('Must',
                 style: textStyle.copyWith(fontWeight: FontWeight.w600)),
             const Text(' '),
@@ -65,7 +63,7 @@ class _PlayerTableState extends State<PlayerTable> {
           ] else ...[
             Text('Team',
                 style: textStyle.copyWith(fontWeight: FontWeight.w600)),
-            Text('Point',
+            Text('Points',
                 style: textStyle.copyWith(fontWeight: FontWeight.w600)),
           ],
         ]),
@@ -85,15 +83,15 @@ class _PlayerTableState extends State<PlayerTable> {
                   ),
                 ),
               ),
-              Text(
-                '${player.playerRating}',
-                style: textStyle,
-              ),
-              Text(
-                '${player.captaincyRating}',
-                style: textStyle,
-              ),
               if (widget.onPlayerUpdate != null) ...[
+                Text(
+                  '${player.playerRating}',
+                  style: textStyle,
+                ),
+                Text(
+                  '${player.captaincyRating}',
+                  style: textStyle,
+                ),
                 Switch(
                   value: player.mustHave,
                   onChanged: (value) {
