@@ -36,7 +36,11 @@ class _PlayerTableState extends State<PlayerTable> {
             padding: EdgeInsets.only(bottom: 24),
             child: Text(''),
           ),
-          Text('Name', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text('Name',
+                style: textStyle.copyWith(fontWeight: FontWeight.w600)),
+          ),
           Text('PR', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
           Text('CR', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
           if (widget.onPlayerUpdate != null) ...[

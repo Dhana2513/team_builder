@@ -24,7 +24,10 @@ class _MatchTeamsViewScreenState extends State<MatchTeamsViewScreen> {
 
   List<Widget> getTeam(TeamEntity team, int index) {
     return [
-      Text('Team : ${index + 1}'),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Text('Team : ${index + 1}'),
+      ),
       padding,
       PlayerTable(players: team.players),
       paddingLarge,
@@ -33,9 +36,12 @@ class _MatchTeamsViewScreenState extends State<MatchTeamsViewScreen> {
 
   List<Widget> getMatchDetails(BuildContext context) {
     return [
-      Text(
-        match.matchName,
-        style: Theme.of(context).textTheme.titleMedium,
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Text(
+          match.matchName,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
       padding,
       for (int i = 0; i < match.teams.length; i++) ...getTeam(match.teams[i], i)
@@ -46,7 +52,7 @@ class _MatchTeamsViewScreenState extends State<MatchTeamsViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: ListView(
           children: getMatchDetails(context),
         ),

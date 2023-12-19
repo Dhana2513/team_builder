@@ -32,7 +32,10 @@ class _ValidatedTeamsScreenState extends State<ValidatedTeamsScreen> {
     }
 
     return [
-      Text('Team : ${index + 1}  Points : ${team.points}'),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Text('Team : ${index + 1}  Points : ${team.points}'),
+      ),
       padding,
       PlayerTable(players: team.players),
       paddingLarge,
@@ -45,9 +48,12 @@ class _ValidatedTeamsScreenState extends State<ValidatedTeamsScreen> {
     });
 
     return [
-      Text(
-        '${match.matchName}    HighestPoints : $highestPoints (Team: $highestPointsTeam)',
-        style: Theme.of(context).textTheme.titleMedium,
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Text(
+          '${match.matchName}    HighestPoints : $highestPoints (Team: $highestPointsTeam)',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
       padding,
       for (int i = 0; i < match.teams.length; i++) ...getTeam(match.teams[i], i)
@@ -58,7 +64,7 @@ class _ValidatedTeamsScreenState extends State<ValidatedTeamsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
         child: ListView(
           children: getMatchDetails(context),
         ),
