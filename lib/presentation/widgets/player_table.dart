@@ -86,11 +86,11 @@ class _PlayerTableState extends State<PlayerTable> {
                 ),
               ),
               Text(
-                '${player.playerRating}%',
+                '${player.playerRating}',
                 style: textStyle,
               ),
               Text(
-                '${player.captaincyRating}%',
+                '${player.captaincyRating}',
                 style: textStyle,
               ),
               if (widget.onPlayerUpdate != null) ...[
