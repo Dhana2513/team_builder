@@ -76,10 +76,13 @@ class _PlayerTableState extends State<PlayerTable> {
                 player.playerType.icon,
                 color: Colors.black54,
               ),
-              Text(
-                '${player.name} ${player.captaincyType.shortName}',
-                style: textStyle.copyWith(
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4.0),
+                child: Text(
+                  '${player.name} ${player.captaincyType.shortName}',
+                  style: textStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Text(
