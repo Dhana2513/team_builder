@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:team_builder/constants/paddings.dart';
-import 'package:team_builder/presentation/screens/add_player_screen.dart';
 import 'package:team_builder/presentation/screens/all_players_screen.dart';
 import 'package:team_builder/presentation/widgets/match_view.dart';
 
@@ -22,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     required String routeName,
   }) {
     return SizedBox(
-      width: 50,
+      width: 200,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
@@ -35,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int clickCount = 0;
 
-  bool get godMode => clickCount >= 5;
+  final adminModeValueNotifier = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -44,36 +43,41 @@ class _HomeScreenState extends State<HomeScreen> {
         title: 'Team Builder',
         onTap: () {
           clickCount++;
-          if (godMode) {
-            setState(() {});
-          }
+          adminModeValueNotifier.value = clickCount >= 5;
         },
       ),
-      floatingActionButton: godMode
-          ? FloatingActionButton(
-              onPressed: () => navigateTo(routeName: AddPlayerScreen.routeName),
-              child: const Icon(Icons.person_add_alt),
-            )
-          : null,
       body: Container(
         color: Colors.white10,
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            if (godMode) ...[
-              navigationButton(
-                title: 'All Players',
-                routeName: AllPlayersScreen.routeName,
-              ),
-              navigationButton(
-                title: 'Create Teams',
-                routeName: CreateTeamsScreen.routeName,
-              ),
-              paddingLarge,
-            ],
-            MatchView(
-              godMode: godMode,
-            ),
+            ValueListenableBuilder(
+                valueListenable: adminModeValueNotifier,
+                builder: (BuildContext context, bool adminMode, Widget? child) {
+                  return SizedBox(
+                    width: 300,
+                    child: Column(
+                      children: [
+                        if (adminMode) ...[
+                          navigationButton(
+                            title: 'All Players',
+                            routeName: AllPlayersScreen.routeName,
+                          ),
+                          navigationButton(
+                            title: 'Create Teams',
+                            routeName: CreateTeamsScreen.routeName,
+                          ),
+                          paddingLarge,
+                        ] else
+                          const SizedBox(
+                            width: 200,
+                            height: 16,
+                          ),
+                      ],
+                    ),
+                  );
+                }),
+            MatchView(adminModeValueNotifier: adminModeValueNotifier),
           ],
         ),
       ),

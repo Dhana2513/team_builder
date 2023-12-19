@@ -4,6 +4,7 @@ import 'package:team_builder/presentation/widgets/team_view.dart';
 
 import '../../core/widgets/common_app_bar.dart';
 import '../../models/entity/player.dart';
+import 'add_player_screen.dart';
 
 class AllPlayersScreen extends StatefulWidget {
   const AllPlayersScreen({Key? key}) : super(key: key);
@@ -33,6 +34,10 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
       appBar: CommonAppBar(
         title: 'All Players',
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => navigateTo(routeName: AddPlayerScreen.routeName),
+        child: const Icon(Icons.person_add_alt),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: FutureBuilder<List<Player>>(
@@ -57,5 +62,9 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
         ),
       ),
     );
+  }
+
+  void navigateTo({required String routeName}) {
+    Navigator.of(context).pushNamed(routeName);
   }
 }

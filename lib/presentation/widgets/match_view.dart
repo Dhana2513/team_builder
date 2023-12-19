@@ -10,9 +10,10 @@ import '../screens/match_teams_view_screen.dart';
 class MatchView extends StatefulWidget {
   const MatchView({
     Key? key,
-    required this.godMode,
+    required this.adminModeValueNotifier,
   }) : super(key: key);
-  final bool godMode;
+
+  final ValueNotifier<bool> adminModeValueNotifier;
 
   @override
   _MatchViewState createState() => _MatchViewState();
@@ -51,25 +52,34 @@ class _MatchViewState extends State<MatchView> {
                   ),
                 ),
               ),
-              paddingLarge,
-              if (widget.godMode) ...[
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        ValidateTeamsScreen.routeName,
-                        arguments: match,
-                      );
-                    },
-                    child: const Text('Validate')),
-                paddingLarge,
-                IconButton(
-                  onPressed: () => showAlertDialog(match),
-                  icon: Icon(
-                    Icons.delete,
-                    color: Colors.grey.shade700,
-                  ),
-                )
-              ],
+              ValueListenableBuilder(
+                  valueListenable: widget.adminModeValueNotifier,
+                  builder:
+                      (BuildContext context, bool adminMode, Widget? child) {
+                    return Row(
+                      children: [
+                        if (adminMode) ...[
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(
+                                  ValidateTeamsScreen.routeName,
+                                  arguments: match,
+                                );
+                              },
+                              child: const Text('Validate')),
+                          paddingLarge,
+                          IconButton(
+                            onPressed: () => showAlertDialog(match),
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.grey.shade700,
+                            ),
+                          )
+                        ] else
+                          const SizedBox.shrink(),
+                      ],
+                    );
+                  }),
             ],
           ),
         ),

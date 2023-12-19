@@ -62,7 +62,8 @@ class DbUtil {
     );
   }
 
-  final matchStreamController = StreamController<List<MatchEntity>>();
+  StreamController<List<MatchEntity>> matchStreamController =
+      StreamController<List<MatchEntity>>();
 
   Stream<List<MatchEntity>> get matchStream => matchStreamController.stream;
 
