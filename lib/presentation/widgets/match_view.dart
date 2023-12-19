@@ -42,7 +42,9 @@ class _MatchViewState extends State<MatchView> {
                     arguments: match,
                   );
                 },
-                child: Center(
+                child: Container(
+                  width: 200,
+                  padding: const EdgeInsets.all(16),
                   child: Text(
                     match.matchName,
                     style: Theme.of(context).textTheme.titleMedium,
