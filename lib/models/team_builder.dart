@@ -85,7 +85,7 @@ class TeamBuilder {
     if (solidRaiders) {
       possibleTeamModels.removeWhere((model) => model.rai == 1);
       possibleTeamModels.add(TeamModel(def: 2, all: 2, rai: 3));
-      possibleTeamModels.add(TeamModel(def: 2, all: 1, rai: 3));
+      possibleTeamModels.add(TeamModel(def: 3, all: 1, rai: 3));
     }
 
     if (solidAllRounders) {
