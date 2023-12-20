@@ -117,6 +117,10 @@ class TeamEntity {
 
       for (var player2 in players) {
         foundPlayer = player1.isSame(player: player2);
+
+        captain2 ??= player2.isCaptain ? player2 : null;
+        viceCaptain2 ??= player2.isViceCaptain ? player2 : null;
+
         if (foundPlayer) {
           break;
         }
@@ -127,13 +131,8 @@ class TeamEntity {
       }
     }
 
-    for (var player2 in players) {
-      captain2 ??= player2.isCaptain ? player2 : null;
-      viceCaptain2 ??= player2.isViceCaptain ? player2 : null;
-    }
-
-    return captain1?.isSame(player: captain2) == false ||
-        viceCaptain1?.isSame(player: viceCaptain2) == false;
+    return captain1?.isSame(player: captain2) == true &&
+        viceCaptain1?.isSame(player: viceCaptain2) == true;
   }
 
   factory TeamEntity.fromJson(Map<String, dynamic> json, {String? id}) {
