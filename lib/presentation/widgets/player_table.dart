@@ -31,7 +31,7 @@ class _PlayerTableState extends State<PlayerTable> {
 
     return Table(
       columnWidths: widget.onPlayerUpdate != null
-          ? {
+          ? const {
               0: FlexColumnWidth(2),
               1: FlexColumnWidth(3),
               2: FlexColumnWidth(1),
@@ -40,7 +40,7 @@ class _PlayerTableState extends State<PlayerTable> {
               5: FlexColumnWidth(2),
               6: FlexColumnWidth(2),
             }
-          : {
+          : const {
               0: FlexColumnWidth(2),
               1: FlexColumnWidth(3),
               2: FlexColumnWidth(2),
