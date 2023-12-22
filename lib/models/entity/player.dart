@@ -8,6 +8,7 @@ class Player extends Object {
   final TeamType teamType;
   final String name;
   final PlayerType playerType;
+  final double dmPoints;
 
   final int playerRating;
   final int captaincyRating;
@@ -24,6 +25,7 @@ class Player extends Object {
     required this.playerRating,
     required this.captaincyRating,
     required this.mustHave,
+    required this.dmPoints,
     this.points = 0,
     this.captaincyType = CaptaincyType.none,
   });
@@ -49,6 +51,9 @@ class Player extends Object {
       captaincyRating: json[PlayerKeys.captaincyRating],
       points:
           json.containsKey(PlayerKeys.points) ? json[PlayerKeys.points] : 0.0,
+      dmPoints: json.containsKey(PlayerKeys.dmPoints)
+          ? json[PlayerKeys.dmPoints]
+          : 0.0,
       captaincyType:
           CaptaincyTypeX.fromName(name: json[PlayerKeys.captaincyType]),
     );
@@ -64,6 +69,7 @@ class Player extends Object {
       PlayerKeys.captaincyType: captaincyType.name,
       PlayerKeys.mustHave: mustHave,
       PlayerKeys.points: points,
+      PlayerKeys.dmPoints: dmPoints,
     };
   }
 
@@ -76,6 +82,7 @@ class Player extends Object {
     int? captaincyRating,
     bool? mustHave,
     double? points = 0,
+    double? dmPoints = 0,
     CaptaincyType? captaincyType,
   }) {
     return Player(
@@ -87,6 +94,7 @@ class Player extends Object {
       captaincyRating: captaincyRating ?? this.captaincyRating,
       mustHave: mustHave ?? this.mustHave,
       points: points ?? this.points,
+      dmPoints: dmPoints ?? this.dmPoints,
       captaincyType: captaincyType ?? this.captaincyType,
     );
   }
@@ -101,4 +109,5 @@ class PlayerKeys {
   static const captaincyType = 'captaincyType';
   static const mustHave = 'mustHave';
   static const points = 'points';
+  static const dmPoints = 'dmPoints';
 }

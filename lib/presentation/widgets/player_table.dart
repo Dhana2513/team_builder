@@ -36,9 +36,10 @@ class _PlayerTableState extends State<PlayerTable> {
               1: FlexColumnWidth(3),
               2: FlexColumnWidth(1),
               3: FlexColumnWidth(1),
-              4: FlexColumnWidth(2),
+              4: FlexColumnWidth(1),
               5: FlexColumnWidth(2),
               6: FlexColumnWidth(2),
+              7: FlexColumnWidth(2),
             }
           : const {
               0: FlexColumnWidth(2),
@@ -54,6 +55,7 @@ class _PlayerTableState extends State<PlayerTable> {
           ),
           Text('Name', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
           if (widget.onPlayerUpdate != null) ...[
+            Text('DP', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
             Text('PR', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
             Text('CR', style: textStyle.copyWith(fontWeight: FontWeight.w600)),
             Text('Must',
@@ -84,14 +86,9 @@ class _PlayerTableState extends State<PlayerTable> {
                 ),
               ),
               if (widget.onPlayerUpdate != null) ...[
-                Text(
-                  '${player.playerRating}',
-                  style: textStyle,
-                ),
-                Text(
-                  '${player.captaincyRating}',
-                  style: textStyle,
-                ),
+                Text('${player.dmPoints}', style: textStyle),
+                Text('${player.playerRating}', style: textStyle),
+                Text('${player.captaincyRating}', style: textStyle),
                 Switch(
                   value: player.mustHave,
                   onChanged: (value) {

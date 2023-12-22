@@ -22,9 +22,13 @@ class TeamEntity {
       final players = [...team];
       final List<Player> allPlayers = [];
 
-      players.removeWhere((player) =>
-          player.name == captain?.name &&
-          player.playerType == captain?.playerType);
+      if (captain != null) {
+        players.removeWhere((player) =>
+            player.name == captain.name &&
+            player.playerType == captain.playerType);
+      } else {
+        players.removeWhere((player) => player.captaincyRating <= 20);
+      }
 
       for (final player in players) {
         for (int i = 1; i < player.captaincyRating; i += 2) {
@@ -70,8 +74,10 @@ class TeamEntity {
 
   bool validate({required TeamType teamType1, required TeamType teamType2}) {
     int team1Count = 0, team2Count = 0;
+    double dmPoints = 0;
 
     for (final player in players) {
+      dmPoints += player.dmPoints;
       if (player.teamType == teamType1) {
         team1Count++;
       } else {
@@ -79,11 +85,17 @@ class TeamEntity {
       }
     }
 
+    if (dmPoints > 100) {
+      print('Dream11 Credit exceeded : $dmPoints');
+      return false;
+    }
     if (team1Count <= 1 || team2Count <= 1) {
+      print('teamPlayer count is less than ($teamType1 : $teamType2)');
       return false;
     }
 
     if (!validateRaiderCount(teamType1: teamType1, teamType2: teamType2)) {
+      print('Three raiders from same team');
       return false;
     }
 
@@ -94,8 +106,6 @@ class TeamEntity {
     } else if (team2Count >= 5) {
       team = players.where((player) => player.teamType == teamType2).toList();
     }
-
-    team.removeWhere((player) => player.captaincyRating <= 10);
 
     if (team.length < 2) {
       return false;

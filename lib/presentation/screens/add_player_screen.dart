@@ -20,6 +20,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
   TeamType? teamType;
   PlayerType? playerType;
   TextEditingController playerNameController = TextEditingController();
+  TextEditingController dmPointsController = TextEditingController();
   double playerRating = 0;
   double captaincyRating = 0;
 
@@ -38,6 +39,8 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
       playerType = player!.playerType;
       captaincyRating = player!.captaincyRating.toDouble();
       playerRating = player!.playerRating.toDouble();
+      mustHave = player!.mustHave;
+      dmPointsController.text = player!.dmPoints.toString();
     }
   }
 
@@ -80,6 +83,17 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
               ),
               textCapitalization: TextCapitalization.sentences,
               keyboardType: TextInputType.name,
+            ),
+            paddingLarge,
+            TextField(
+              controller: dmPointsController,
+              decoration: const InputDecoration(
+                labelText: 'Dream11 Points',
+                border: OutlineInputBorder(),
+                filled: true,
+              ),
+              textCapitalization: TextCapitalization.sentences,
+              keyboardType: TextInputType.number,
             ),
             paddingLarge,
             DropdownButtonFormField<PlayerType>(
@@ -151,7 +165,12 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
 
   void validateAndSubmit() {
     final playerName = playerNameController.text.trim();
-    if (teamType == null || playerName.isEmpty || playerType == null) {
+    final dmPoints = dmPointsController.text.trim();
+
+    if (teamType == null ||
+        playerName.isEmpty ||
+        dmPoints.isEmpty ||
+        playerType == null) {
       showSnackBar(message: 'Fill all fields');
       return;
     } else {
@@ -162,6 +181,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
         playerRating: playerRating.toInt(),
         mustHave: mustHave,
         captaincyRating: captaincyRating.toInt(),
+        dmPoints: double.parse(dmPoints),
       );
 
       if (modifyPlayer) {

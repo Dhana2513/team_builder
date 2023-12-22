@@ -13,6 +13,7 @@ class PlayerSelectionEntity extends Player {
     required bool mustHave,
     required CaptaincyType captaincyType,
     required double points,
+    required double dmPoints,
   }) : super(
           teamType: teamType,
           name: name,
@@ -22,6 +23,7 @@ class PlayerSelectionEntity extends Player {
           mustHave: mustHave,
           captaincyType: captaincyType,
           points: points,
+          dmPoints: dmPoints,
         );
 
   factory PlayerSelectionEntity.fromPlayer({required Player player}) {
@@ -34,6 +36,7 @@ class PlayerSelectionEntity extends Player {
       mustHave: player.mustHave,
       captaincyType: player.captaincyType,
       points: player.points,
+      dmPoints: player.dmPoints,
     );
   }
 
