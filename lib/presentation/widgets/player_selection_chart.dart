@@ -120,7 +120,7 @@ class PlayerSelectionChart extends StatelessWidget {
                 Text(player.viceCaptainCount.toString(), style: textStyle),
                 if (showPoints)
                   Text(
-                    '${player.points}',
+                    '${player.isCaptain ? player.points / 2 : player.isViceCaptain ? player.points / 1.5 : player.points}',
                     style: textStyle,
                   ),
               ],
