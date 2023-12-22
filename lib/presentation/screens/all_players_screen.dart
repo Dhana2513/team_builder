@@ -49,14 +49,16 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
 
             final players = snapshot.data!;
 
-            return SingleChildScrollView(
-              child: TeamView(
-                players: players,
-                onPlayerUpdate: () {
-                  fetchAllPlayers();
-                  setState(() {});
-                },
-              ),
+            return ListView(
+              children: [
+                TeamView(
+                  players: players,
+                  onPlayerUpdate: () {
+                    fetchAllPlayers();
+                    setState(() {});
+                  },
+                ),
+              ],
             );
           },
         ),

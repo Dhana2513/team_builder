@@ -90,7 +90,7 @@ class TeamEntity {
       return false;
     }
     if (team1Count <= 1 || team2Count <= 1) {
-      print('teamPlayer count is less than ($teamType1 : $teamType2)');
+      print('teamPlayer count is less ($team1Count : $team2Count)');
       return false;
     }
 
