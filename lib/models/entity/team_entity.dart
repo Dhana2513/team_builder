@@ -106,7 +106,9 @@ class TeamEntity {
         print('Puneri Paltan has less count ($team1Count : $team2Count)');
         return false;
       }
-    } else if (team1Count <= 1 || team2Count <= 1) {
+    }
+
+    if (team1Count <= 1 || team2Count <= 1) {
       print('teamPlayer count is less ($team1Count : $team2Count)');
       return false;
     }
