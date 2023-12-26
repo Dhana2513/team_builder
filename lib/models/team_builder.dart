@@ -99,6 +99,13 @@ class TeamBuilder {
       }
     }
 
+    if ([teamType1, teamType2].contains(TeamType.puneriPaltan)) {
+      possibleTeamModels.clear();
+      possibleTeamModels.add(TeamModel(def: 2, all: 2, rai: 3));
+      possibleTeamModels.add(TeamModel(def: 2, all: 2, rai: 3));
+      possibleTeamModels.add(TeamModel(def: 3, all: 2, rai: 2));
+    }
+
     int count = numberOfTeams;
 
     List<TeamEntity> selectedTeams = [];

@@ -89,7 +89,15 @@ class TeamEntity {
       print('Dream11 Credit exceeded : $dmPoints');
       return false;
     }
-    if (team1Count <= 1 || team2Count <= 1) {
+
+    //Modified to support Pune Team
+    if ([teamType1, teamType2].contains(TeamType.puneriPaltan)) {
+      if ((teamType1 == TeamType.puneriPaltan && team1Count <= 4) ||
+          (teamType2 == TeamType.puneriPaltan && team2Count <= 4)) {
+        print('Puneri Paltan has less count ($team1Count : $team2Count)');
+        return false;
+      }
+    } else if (team1Count <= 1 || team2Count <= 1) {
       print('teamPlayer count is less ($team1Count : $team2Count)');
       return false;
     }
