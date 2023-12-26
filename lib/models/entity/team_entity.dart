@@ -64,8 +64,17 @@ class TeamEntity {
         raider2Count++;
       }
     }
+    if ([teamType1, teamType2].contains(TeamType.puneriPaltan)) {
+      if (teamType1 == TeamType.puneriPaltan && raider2Count >= 2) {
+        print('2 Raiders against Pune');
+        return false;
+      }
 
-    if (raider1Count == 3 || raider2Count == 3) {
+      if (teamType2 == TeamType.puneriPaltan && raider1Count >= 2) {
+        print('2 Raiders against Pune');
+        return false;
+      }
+    } else if (raider1Count == 3 || raider2Count == 3) {
       return false;
     }
 
