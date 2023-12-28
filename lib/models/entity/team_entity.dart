@@ -26,6 +26,11 @@ class TeamEntity {
         players.removeWhere((player) =>
             player.name == captain.name &&
             player.playerType == captain.playerType);
+
+        if (captain.playerType == PlayerType.defender) {
+          players.removeWhere(
+              (player) => player.playerType == PlayerType.defender);
+        }
       } else {
         players.removeWhere((player) => player.captaincyRating <= 20);
       }
