@@ -24,15 +24,10 @@ class _MatchTeamsViewScreenState extends State<MatchTeamsViewScreen> {
   }
 
   List<Widget> getTeam(TeamEntity team, int index) {
-    double dmPoints = 0;
-    for (final player in team.players) {
-      dmPoints += player.dmPoints;
-    }
-
     return [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Text('Team : ${index + 1} dmPoints : $dmPoints'),
+        child: Text('Team : ${index + 1}'),
       ),
       padding,
       PlayerTable(players: team.players),
