@@ -81,8 +81,8 @@ class Player extends Object {
     int? playerRating,
     int? captaincyRating,
     bool? mustHave,
-    double? points = 0,
-    double? dmPoints = 0,
+    double? points,
+    double? dmPoints,
     CaptaincyType? captaincyType,
   }) {
     return Player(
