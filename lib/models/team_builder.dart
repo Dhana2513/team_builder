@@ -102,8 +102,14 @@ class TeamBuilder {
     if ([teamType1, teamType2].contains(TeamType.puneriPaltan)) {
       possibleTeamModels.clear();
       possibleTeamModels.add(TeamModel(def: 2, all: 2, rai: 3));
-      possibleTeamModels.add(TeamModel(def: 2, all: 2, rai: 3));
       possibleTeamModels.add(TeamModel(def: 3, all: 2, rai: 2));
+      possibleTeamModels.add(TeamModel(def: 3, all: 2, rai: 2));
+      possibleTeamModels.add(TeamModel(def: 4, all: 2, rai: 1));
+      possibleTeamModels.add(TeamModel(def: 4, all: 2, rai: 1));
+
+      if (solidRaiders) {
+        possibleTeamModels.add(TeamModel(def: 2, all: 2, rai: 3));
+      }
     }
 
     int count = numberOfTeams;
